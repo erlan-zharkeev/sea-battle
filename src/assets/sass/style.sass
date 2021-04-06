@@ -1,0 +1,403 @@
+@import nullstyle
+@import mediaqueries
+//@import url('https://fonts.googleapis.com/css2?family=Raleway&display=swap')
+@import url('https://fonts.googleapis.com/css2?family=Homemade+Apple&display=swap')
+$basicFont: 'Homemade Apple', cursive
+// colors
+$darkGrey: #747474
+$blue: #443bbe
+$trueBlue: #6A72DF
+//common styles
+$cellSize:4.5rem
+$cellSize5: 4rem
+$cellSize2: 4.8rem
+$cellSize3: 3.8rem
+$cellSize4: 2.8rem
+$borderStyle: solid .3rem $trueBlue
+$boxShadow: inset .1rem .1rem 1rem $trueBlue
+::-webkit-scrollbar
+	width: 0px
+	background: transparent
+html
+	background-color: black
+	font-family: $basicFont
+	font-weight: 800
+	color: $trueBlue
+	scrollbar-width: none
+	overflow: hidden
+	@include MW1024
+		font-size: 8px
+	@include MW768
+		font-size: 6px
+	@include MW414
+		font-size: 5px
+	@include MW320
+		font-size: 4px
+	@include L823
+		font-size: 6px
+.wrapper
+	background-image: url('../img/bgScndVar.png')
+	background-size: cover
+	overflow-x: hidden
+	position: absolute
+	width: 100%
+	height: 100%
+	top:  50%
+	left: 50%
+	transform: translate(-50%,-50%)
+// GAME
+.game 
+	width: 100vw
+	height: 100vh
+	display: flex
+	flex-direction: column
+	justify-content: center
+	align-items: center
+	padding: 2rem 
+	&__title 
+		font-size: 4rem
+		padding: 2rem
+		display: flex
+		align-items: center
+		max-height: 30%
+		+MW414 
+			display: none
+		+L823 
+			display: none
+		.top-side 
+			display: flex
+			justify-content: center
+			align-items: center
+			h1 
+				padding: 1rem 0rem 1rem 0rem
+			img 
+				transform: scale(.8)
+		.bottom-side 
+			display: flex
+			flex-direction: column
+			justify-content: center
+			width: 100%
+			margin-left: 3rem
+			a 
+				width: 100%
+				margin: .7rem 0rem
+				display: flex
+				justify-content: center
+				button
+					width: 100%
+					font-weight: 800
+					font-size: 1.5rem
+					color: $trueBlue 
+					background-color: transparent
+					white-space: nowrap
+					height: 4rem
+					border: solid .3rem $trueBlue 
+	&__table-container
+		display: flex
+		width: 100%
+		max-width: 117rem
+		+MW900
+			flex-direction: column
+			align-items: center
+			width: 100%
+		+L823 
+			flex-direction: row
+	&__userSide
+		[data-status="ship"] 
+			background-color: $blue
+	&__aiSide
+		[data-status="ship"]:hover
+			box-shadow: $boxShadow
+		[data-status="deadZone"]:hover
+			box-shadow: $boxShadow
+		[data-status="empty"]:hover
+			box-shadow: $boxShadow
+	&__userSide,.game__aiSide
+		width: 50%
+		height: 100%
+		display: flex
+		justify-content: space-between
+		align-items: center
+		[data-status="hit"] 
+			background: repeating-linear-gradient(-60deg, #ff5454 0, #ff5454 1px, transparent 5px, transparent 5px)
+		[data-status="miss"]
+			
+		[data-status="sunk"] 
+			background: repeating-linear-gradient(60deg, black 0, black 1px, transparent 5px, transparent 5px)
+		+MW414  
+			width: 100%
+		.dot 
+			width: 20%
+			height: 20%
+			border-radius: 50%
+			background-color: $darkGrey!important
+	&__table 
+		width: 100%
+		height: 100%
+		padding: 2rem 
+		display: flex
+		flex-direction: column
+		justify-content: center 
+		align-items: center
+		+MW414 
+			padding: 1rem
+	&__row 
+		display: flex
+		border-bottom:	$borderStyle
+		&:last-child
+			border-bottom: none
+			.game__cell
+				border-bottom:	$borderStyle
+	&__cell,.info__cell 
+		width: $cellSize
+		height: $cellSize
+		border-right: $borderStyle
+		color: $trueBlue
+		text-transform: uppercase
+		font-size: 2.5rem
+		display: flex
+		justify-content: center
+		align-items: center
+		+MW1400 
+			width: $cellSize5
+			height: $cellSize5
+		+MW414 
+			width: $cellSize2
+			height: $cellSize2
+		+L823 
+			width: $cellSize3
+			height: $cellSize3
+		+L568 
+			width: $cellSize4
+			height: $cellSize4
+		&:last-child
+			border-bottom: none
+	.last-let 
+		border-right: none
+	
+//CONTROLS//
+.game__controls 
+	img 
+		transform: scale(.4)
+		position: absolute 
+		top: 1%
+		right: 1%
+.btn 
+	display: flex
+	justify-content: center
+	align-items: center
+	cursor: pointer
+	i 
+		width: 10rem
+		border: solid white .6rem 
+		padding: 1rem
+		font-size: 3rem 
+		color: white
+		display: flex
+		justify-content: center
+		align-items: center
+		margin: 1rem
+//MESSAGE
+.game__start
+	background-image: url('../img/bgScndVar.png')
+	background-size: cover
+	width: 100vw
+	height: 100vh
+	top: 0%
+	left: 0%
+	position: absolute
+	display: flex
+	justify-content: center
+	align-items: center
+	z-index: 3
+	button 
+		font-weight: 800
+		padding: 1rem 5rem
+		color: $trueBlue
+		font-size: 4rem
+		background-color: transparent
+//STATUS//
+.disabled 
+	opacity: 30%
+	cursor: none
+	pointer-events: none
+	transition: .2s
+.displayNone
+	display: none
+.game__sound
+	position: absolute 
+	top: 4%
+	left: 4%
+	transform: scale(.7)
+	&:hover 
+		cursor: pointer
+	+MW1024 
+		transform: scale(.7)
+	+L823 
+		display: none
+	+MW414 
+		display: none
+.bg-soundOn 
+	width: 64px
+	height: 64px
+	background: url('../img/css_sprites.png') -94px -10px
+.bg-soundOff 
+	width: 64px
+	height: 64px
+	background: url('../img/css_sprites.png') -10px -10px
+//MOBILE MENU
+.mobile-btn 
+	position: absolute
+	top: 5%
+	right: 5%
+	font-size: 4.5rem
+	display: none
+	z-index: 2
+	+L823 
+		display: block
+	+L667
+		top: 5%
+		right: 3%
+	+MW414 
+		display: block
+.mobile-menu 
+	background-image: url('../img/bgScndVar.png')
+	background-size: cover
+	width: 100vw
+	height: 100vh
+	position: absolute
+	display: flex
+	flex-direction: column
+	color: $trueBlue
+	justify-content: center
+	align-items: center
+	.logo-side
+		display: flex
+		flex-direction: column
+		align-items: center
+		width: 100%
+		font-size: 4rem
+		h1 
+			padding: 3rem
+		+L823 
+			h1 
+				padding: 0rem
+			img
+				transform: scale(.5)
+	.btns-side
+		display: flex
+		flex-direction: column
+		align-items: center
+		button 
+			background-color: transparent
+			color: $trueBlue
+			padding: 1rem 2rem
+			font-size: 4rem
+			+L823 
+				font-size: 3rem
+				padding: 0rem
+	.sound-side
+		transform: scale(.5)
+.showMessage 
+	background-image: url('../img/bgScndVar.png')
+	background-size: cover
+	width: 100vw
+	height: 100vh
+	position: absolute
+	display: flex
+	flex-direction: column
+	color: $trueBlue
+	justify-content: center
+	align-items: center
+	z-index: 3
+	font-size: 5rem
+	opacity: 100%
+	button
+		color: $trueBlue
+		margin-top: 3rem
+		font-size: 5rem
+		background-color: transparent
+.hideSide
+	opacity: .5	
+	pointer-events: none
+	touch-action: none
+.hide
+	opacity: 0
+	cursor: none
+	pointer-events: none
+	transition: .2s
+//PRELOADER
+.preloader
+	position: absolute
+	width: 100vw
+	height: 100vh
+	background-color: #fff
+	display: flex
+	justify-content: center
+	align-items: center
+	top:50% 
+	left: 50%
+	transform: translate(-50%,-50%)
+	z-index: 1000000
+.lds-spinner 
+	color: $trueBlue
+	display: inline-block
+	position: relative
+	width: 80px
+	height: 80px
+.lds-spinner div 
+	transform-origin: 40px 40px
+	animation: lds-spinner 1.2s linear infinite
+.lds-spinner div:after 
+	content: " "
+	display: block
+	position: absolute
+	top: 3px
+	left: 37px
+	width: 6px
+	height: 18px
+	border-radius: 20%
+	background: $trueBlue
+.lds-spinner div:nth-child(1) 
+	transform: rotate(0deg)
+	animation-delay: -1.1s
+.lds-spinner div:nth-child(2) 
+	transform: rotate(30deg)
+	animation-delay: -1s
+.lds-spinner div:nth-child(3) 
+	transform: rotate(60deg)
+	animation-delay: -0.9s
+.lds-spinner div:nth-child(4) 
+	transform: rotate(90deg)
+	animation-delay: -0.8s
+.lds-spinner div:nth-child(5) 
+	transform: rotate(120deg)
+	animation-delay: -0.7s
+.lds-spinner div:nth-child(6) 
+	transform: rotate(150deg)
+	animation-delay: -0.6s
+.lds-spinner div:nth-child(7) 
+	transform: rotate(180deg)
+	animation-delay: -0.5s
+.lds-spinner div:nth-child(8) 
+	transform: rotate(210deg)
+	animation-delay: -0.4s
+.lds-spinner div:nth-child(9) 
+	transform: rotate(240deg)
+	animation-delay: -0.3s
+.lds-spinner div:nth-child(10) 
+	transform: rotate(270deg)
+	animation-delay: -0.2s
+.lds-spinner div:nth-child(11) 
+	transform: rotate(300deg)
+	animation-delay: -0.1s
+.lds-spinner div:nth-child(12) 
+	transform: rotate(330deg)
+	animation-delay: 0s
+
+@keyframes lds-spinner 
+	0% 
+		opacity: 1
+	100% 
+		opacity: 0
+

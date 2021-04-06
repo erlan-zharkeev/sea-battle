@@ -1,0 +1,28 @@
+// form
+a(href="form")
+form.form                             
+	.form__content
+		.form__title 
+			p Оставьте заявку на съемку
+		// client part
+		.inputLine
+			input(type="text" data-valid="false" name="username" placeholder="Ваше Имя..." required tabindex='1' )
+			.statusBox 
+				i(class="fa fa-exclamation")
+		.inputLine
+			input(type="text" data-valid="false" name="phone" placeholder="+7 XXX XXX-XX-XX" required tabindex='2')
+			.statusBox 
+				i(class="fa fa-exclamation")
+		.inputLine
+			input(type="email" data-valid="false" name="email" placeholder="E-mail..." required tabindex='3')
+			.statusBox 
+				i(class="fa fa-exclamation")
+		textarea(class="comments" name="comments", cols="30", rows="10" placeholder="Расскажите мне о своем проекте..." tabindex='4')
+		.policy
+			.policy__checkSquare
+				i(class="fa fa-check")
+			label(for="agree") Отправляя эту форму я подтверждаю, что ознакомлен(-а)с правовой информацией и выражаю свое согласие на обработку персональныхданных.<a href="policy.html"> Политика безопастности.</a>
+		button(class="btn formSubmit"	disabled="true" tabindex='-1') Отправить
+		.form__cross(tabindex='100') 
+			.crossLine.line1
+			.crossLine.line2
