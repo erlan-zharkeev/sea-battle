@@ -1,5 +1,5 @@
-const path = require('path');
-const webpack = require('webpack');
+const path = require('path')
+const webpack = require('webpack')
 
 const isDev = process.env.NODE_ENV === 'development'
 const isProd = !isDev
@@ -7,12 +7,12 @@ const isProd = !isDev
 const filename = ext => isDev ? `[name].${ext}` : `[name].[hash].${ext}`
 
 /*PLUGINS*/
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 const {
 	CleanWebpackPlugin
-} = require('clean-webpack-plugin');
-const CopyPlugin = require('copy-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin'); //get css from js file
+} = require('clean-webpack-plugin')
+const CopyPlugin = require('copy-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin') //get css from js file
 /////////////////////////////////////////////
 module.exports = {
 	context: path.resolve(__dirname, 'src'),
@@ -45,84 +45,78 @@ module.exports = {
 		new MiniCssExtractPlugin({
 			filename: filename('css'),
 		}),
-		// new webpack.ProvidePlugin({
-		// 	'$': "jquery",
-		// 	'jQuery': "jquery",
-		// 	'window.jQuery': 'jquery',
-		// 	'Popper': 'popper.js',
-		// }),
 		new webpack.HotModuleReplacementPlugin(),
 	],
 	module: {
 		rules: [{
-				test: /\.pug$/,
-				use: [{
-					loader: 'pug-loader',
-					options: {
-						pretty: isDev
-					},
-				}]
-			}, {
-				test: /\.s[ca]ss$/,
-				use: [{
-					loader: MiniCssExtractPlugin.loader,
-				}, 'css-loader', 'postcss-loader', 'sass-loader']
-			}, {
-				test: /\.css$/,
-				use: [{
-					loader: MiniCssExtractPlugin.loader,
-				}, 'css-loader']
-			},
-			{
-				test: /\.(gif|png|jpe?g|svg|mp3)$/i,
-				exclude: /node_modules/,
-				use: [{
-						loader: 'file-loader',
-						options: {
-							name: `[path][name].[ext]`
-						}
-					},
-					{
-						loader: 'image-webpack-loader',
-						options: {
-							disable: isDev,
-							mozjpeg: {
-								progressive: true,
-								quality: 70
-							},
-							pngquant: {
-								quality: [0.35, 0.80],
-								speed: 4
-							},
-						},
-					},
-				],
-			},
-			{
-				test: /\.(woff(2)?|ttf|eot|svg)$/,
+			test: /\.pug$/,
+			use: [{
+				loader: 'pug-loader',
+				options: {
+					pretty: isDev
+				},
+			}]
+		}, {
+			test: /\.s[ca]ss$/,
+			use: [{
+				loader: MiniCssExtractPlugin.loader,
+			}, 'css-loader', 'postcss-loader', 'sass-loader']
+		}, {
+			test: /\.css$/,
+			use: [{
+				loader: MiniCssExtractPlugin.loader,
+			}, 'css-loader']
+		},
+		{
+			test: /\.(gif|png|jpe?g|svg|mp3)$/i,
+			exclude: /node_modules/,
+			use: [{
 				loader: 'file-loader',
 				options: {
 					name: `[path][name].[ext]`
-				},
+				}
 			},
 			{
-				test: /\.mp4$/,
-				loader: 'file-loader',
+				loader: 'image-webpack-loader',
 				options: {
-					name: '[path][name].[ext]',
+					disable: isDev,
+					mozjpeg: {
+						progressive: true,
+						quality: 70
+					},
+					pngquant: {
+						quality: [0.35, 0.80],
+						speed: 4
+					},
 				},
 			},
-			{
-				test: /\.m?js$/,
-				exclude: /node_modules/,
-				use: {
-					loader: "babel-loader",
-					options: {
-						presets: ['@babel/preset-env'],
-						plugins: ['@babel/plugin-proposal-class-properties']
-					}
+			],
+		},
+		{
+			test: /\.(woff(2)?|ttf|eot|svg)$/,
+			loader: 'file-loader',
+			options: {
+				name: `[path][name].[ext]`
+			},
+		},
+		{
+			test: /\.mp4$/,
+			loader: 'file-loader',
+			options: {
+				name: '[path][name].[ext]',
+			},
+		},
+		{
+			test: /\.m?js$/,
+			exclude: /node_modules/,
+			use: {
+				loader: "babel-loader",
+				options: {
+					presets: ['@babel/preset-env'],
+					plugins: ['@babel/plugin-proposal-class-properties']
 				}
 			}
+		}
 		]
 	},
 	optimization: {
