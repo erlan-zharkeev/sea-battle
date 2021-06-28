@@ -1,22 +1,21 @@
-import {
-	isInternetExplorer
-} from './gameControls'
-
 import { Howl } from 'howler'
 
 export const music = new Howl({
-	src: [`../assets/audio/music.mp3`]
+	src: [`./assets/audio/music.mp3`],
+	loop: true,
 })
-
+window.addEventListener('focus', function () {
+	if (soundStatus) music.play()
+})
 window.addEventListener('blur', function () {
-	music.pause()
+	music.stop()
 })
 
 export function sound(name) {
 	let sound
 	if (soundStatus) {
 		sound = new Howl({
-			src: [`../assets/audio/${name}.mp3`]
+			src: [`./assets/audio/${name}.mp3`]
 		})
 		sound.play()
 	}
