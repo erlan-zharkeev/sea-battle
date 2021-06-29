@@ -1,12 +1,12 @@
 import { Howl } from 'howler'
 
-export const music = new Howl({
-	src: [`./assets/audio/music.mp3`],
-	loop: true,
-})
+let soundStatus = true
+let music
+
 window.addEventListener('focus', function () {
-	if (soundStatus) music.play()
+	if (soundStatus && music) music.play()
 })
+
 window.addEventListener('blur', function () {
 	music.stop()
 })
@@ -15,28 +15,26 @@ export function sound(name) {
 	let sound
 	if (soundStatus) {
 		sound = new Howl({
-			src: [`./assets/audio/${name}.mp3`]
+			src: [`./assets/audio/${name}.mp3`],
+			loop: name === 'music'
 		})
 		sound.play()
+		if (name === 'music') music = sound
 	}
 }
 
 const soundBtn = document.querySelector('.game__sound')
 soundBtn.addEventListener('click', toggleSound)
 
-const mobileSoundBtn = document.querySelector('.sound-side')
-mobileSoundBtn.addEventListener('click', toggleSound)
-
-export let soundStatus = true
-
 function toggleSound() {
-	const soundIcon = this.firstElementChild
-	if (soundIcon.className === 'bg-soundOn') {
-		soundIcon.className = 'bg-soundOff'
+	const soundButton = this.firstElementChild
+	if (soundButton.innerHTML === 'sound off') {
+		soundButton.innerHTML = 'sound on'
 		soundStatus = false
-		music.pause()
+		music.stop()
+
 	} else {
-		soundIcon.className = 'bg-soundOn'
+		soundButton.innerHTML = 'sound off'
 		soundStatus = true
 		music.play()
 	};

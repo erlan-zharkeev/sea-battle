@@ -32,25 +32,16 @@ import {
 } from './positionGenerator'
 
 import {
-	music,
+	sound,
 } from './sound'
 
 function playGame(e) {
 	e.preventDefault()
 	startMessage.classList.add('hide')
 	new Gamer('.game__aiSide', 'user')
-	music.play()
+	sound('music')
 };
 
-//MOBILE MENU BTN
-const mobileBtn = document.querySelector('.mobile-btn')
-mobileBtn.addEventListener('click', toggleMobileMenu)
-const mobileMenu = document.querySelector('.mobile-menu')
-
-function toggleMobileMenu() {
-	if (mobileMenu.classList.contains('hide')) mobileMenu.classList.remove('hide')
-	else mobileMenu.classList.add('hide')
-}
 //RESTART BTN
 const restartBtns = document.querySelectorAll('.restart')
 restartBtns.forEach(btn => {
@@ -63,6 +54,5 @@ function restartGame(e) {
 	new Field().clearField()
 	generateShip()
 	message.classList.add('hide')
-	mobileMenu.classList.add('hide')
 	new Gamer('.game__aiSide', 'user')
 }

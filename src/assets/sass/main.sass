@@ -1,0 +1,159 @@
+::-webkit-scrollbar
+    width: 0px
+    background: transparent
+html
+    font-family: $basicFont
+    font-weight: 700
+    scrollbar-width: none
+    overflow: hidden
+    @include MW1024
+        font-size: 8px
+    @include MW768
+        font-size: 6px
+    @include MW414
+        font-size: 5px
+    @include MW320
+        font-size: 4px
+    @include L823
+        font-size: 6px
+.wrapper
+    background-size: cover
+    overflow-x: hidden
+    position: absolute
+    width: 100%
+    height: 100%
+    top: 50%
+    left: 50%
+    transform: translate(-50%,-50%)
+.game
+    width: 100vw
+    height: 100vh
+    display: flex
+    flex-direction: column
+    justify-content: center
+    align-items: center
+    padding: 2rem
+    +MW414
+        justify-content: flex-start
+    &__title
+        font-size: 4rem
+        padding: 2rem
+        display: flex
+        align-items: center
+        max-height: 30%
+        +MW414
+            width: 70%
+            flex-direction: column
+        .top-side
+            display: flex
+            justify-content: center
+            align-items: center
+            h1
+                text-align: center
+                padding: 1rem 0rem 1rem 0rem
+            img
+                transform: scale(.8)
+        .bottom-side
+            display: flex
+            flex-direction: column
+            justify-content: center
+            width: 100%
+            margin-left: 3rem
+            +MW414
+                margin-top: 1.5rem
+                margin-left: 0
+            button
+                width: 15rem
+                font-weight: 700
+                font-size: 1.5rem
+                background-color: transparent
+                white-space: nowrap
+                height: 4rem
+                border: solid .2rem black
+                +MW900
+                    width: 100%
+                +MW414
+                    font-size: 2.5rem
+                    font-weight: 700
+                    border: solid .5rem black
+                    height: 5rem
+                    margin-bottom: 1rem
+    &__table-container
+        display: flex
+        width: 100%
+        max-width: 117rem
+        +MW900
+            flex-direction: column
+            align-items: center
+            width: 100%
+        +L823
+            flex-direction: row
+    &__userSide
+        [data-status="ship"]
+            background-color: $blue
+    &__aiSide
+        [data-status="ship"]:hover
+            box-shadow: $boxShadow
+        [data-status="deadZone"]:hover
+            box-shadow: $boxShadow
+        [data-status="empty"]:hover
+            box-shadow: $boxShadow
+    &__userSide,.game__aiSide
+        width: 50%
+        height: 100%
+        display: flex
+        justify-content: space-between
+        align-items: center
+        [data-status="hit"]
+            background: $red
+        [data-status="sunk"]
+            background: grey
+        +MW414
+            width: 100%
+        .dot
+            width: 20%
+            height: 20%
+            border-radius: 50%
+            background-color: black
+    &__table
+        width: 100%
+        height: 100%
+        padding: 2rem
+        display: flex
+        flex-direction: column
+        justify-content: center
+        align-items: center
+        +MW414
+            padding: 1rem
+    &__row
+        display: flex
+        border-bottom: $borderStyle
+        &:last-child
+            border-bottom: none
+            .game__cell
+                border-bottom: $borderStyle
+    &__cell,.info__cell
+        width: $cellSize
+        height: $cellSize
+        border-right: $borderStyle
+        text-transform: uppercase
+        font-size: 2.5rem
+        display: flex
+        justify-content: center
+        align-items: center
+        +MW1400
+            width: $cellSize5
+            height: $cellSize5
+        +MW414
+            width: $cellSize2
+            height: $cellSize2
+        +L823
+            width: $cellSize3
+            height: $cellSize3
+        +L568
+            width: $cellSize4
+            height: $cellSize4
+        &:last-child
+            border-bottom: none
+    .last-let
+        border-right: none
