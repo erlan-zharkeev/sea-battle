@@ -14,30 +14,14 @@ html(lang="en")
 					button.restart restart
 				.game__start
 					button play game!
-				.game__sound
-					.bg-soundOn
 				.game__title
 					.top-side
-						img(src="./assets/img/helm.png", alt="helm")
-						h1 Sea Battle v.1.2
+						h1 Sea Battle
 					.bottom-side
-						a(href="https://www.facebook.com/erlan.zharkeev")
-							button send feedback
-						a(href='')
-							button.restart restart
-				.mobile-btn
-					i(class="fa fa-cog")
-				.mobile-menu.hide
-					.logo-side
-						img(src="./assets/img/helm.png", alt="helm")
-						h1 Sea Battle v.1.2
-					.btns-side
-						a(href="https://www.facebook.com/erlan.zharkeev")
-							button send feedback
-						a
-							button.restart restart
-					.sound-side
-						.bg-soundOn
+						button.restart restart
+						.game__sound
+							button.bg-soundOn sound off
+
 				.game__table-container
 					-var alphabet = ['a','b','c','d','e','f','g','h','i']
 					-var side = 0
