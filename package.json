@@ -45,6 +45,7 @@
   },
   "dependencies": {
     "@babel/polyfill": "^7.11.5",
+    "express": "^4.17.1",
     "howler": "^2.2.1",
     "image-webpack-loader": "^7.0.1",
     "optimize-css-assets-webpack-plugin": "^5.0.4",
