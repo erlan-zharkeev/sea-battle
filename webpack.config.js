@@ -1,30 +1,30 @@
-const path = require("path");
-const webpack = require("webpack");
+const path = require('path')
+const webpack = require('webpack')
 
-const isDev = process.env.NODE_ENV === "development";
-const isProd = !isDev;
+const isDev = process.env.NODE_ENV === 'development'
+const isProd = !isDev
 
-const filename = (ext) => (isDev ? `[name].${ext}` : `[name].[hash].${ext}`);
+const filename = (ext) => (isDev ? `[name].${ext}` : `[name].[hash].${ext}`)
 
-/*PLUGINS*/
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const { CleanWebpackPlugin } = require("clean-webpack-plugin");
-const CopyPlugin = require("copy-webpack-plugin");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin"); //get css from js file
-/////////////////////////////////////////////
+/* PLUGINS */
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+const CopyPlugin = require('copy-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin') // get css from js file
+/// //////////////////////////////////////////
 module.exports = {
-  context: path.resolve(__dirname, "src"),
-  mode: "development",
-  entry: ["@babel/polyfill", "./index.js"],
+  context: path.resolve(__dirname, 'src'),
+  mode: 'development',
+  entry: ['@babel/polyfill', './index.js'],
   output: {
-    filename: filename("js"),
-    path: path.resolve(__dirname, "dist"),
-    publicPath: isDev ? "./" : "/",
+    filename: filename('js'),
+    path: path.resolve(__dirname, 'dist'),
+    publicPath: isDev ? './' : '/',
   },
   plugins: [
     new HtmlWebpackPlugin({
-      filename: "index.html",
-      template: path.resolve(__dirname, "./src/pug/index.pug"),
+      filename: 'index.html',
+      template: path.resolve(__dirname, './src/pug/index.pug'),
       inject: true,
       minify: {
         collapseWhitespace: isProd,
@@ -34,17 +34,17 @@ module.exports = {
     new CopyPlugin({
       patterns: [
         {
-          from: path.resolve(__dirname, "./src/static"),
-          to: path.resolve(__dirname, "dist/"),
+          from: path.resolve(__dirname, './src/static'),
+          to: path.resolve(__dirname, 'dist/'),
         },
         {
-          from: path.resolve(__dirname, "./src/assets/audio"),
-          to: path.resolve(__dirname, "dist/assets/audio"),
+          from: path.resolve(__dirname, './src/assets/audio'),
+          to: path.resolve(__dirname, 'dist/assets/audio'),
         },
       ],
     }),
     new MiniCssExtractPlugin({
-      filename: filename("css"),
+      filename: filename('css'),
     }),
     new webpack.HotModuleReplacementPlugin(),
   ],
@@ -54,7 +54,7 @@ module.exports = {
         test: /\.pug$/,
         use: [
           {
-            loader: "pug-loader",
+            loader: 'pug-loader',
             options: {
               pretty: isDev,
             },
@@ -67,9 +67,9 @@ module.exports = {
           {
             loader: MiniCssExtractPlugin.loader,
           },
-          "css-loader",
-          "postcss-loader",
-          "sass-loader",
+          'css-loader',
+          'postcss-loader',
+          'sass-loader',
         ],
       },
       {
@@ -78,7 +78,7 @@ module.exports = {
           {
             loader: MiniCssExtractPlugin.loader,
           },
-          "css-loader",
+          'css-loader',
         ],
       },
       {
@@ -86,13 +86,13 @@ module.exports = {
         exclude: /node_modules/,
         use: [
           {
-            loader: "file-loader",
+            loader: 'file-loader',
             options: {
-              name: `[path][name].[ext]`,
+              name: '[path][name].[ext]',
             },
           },
           {
-            loader: "image-webpack-loader",
+            loader: 'image-webpack-loader',
             options: {
               disable: isDev,
               mozjpeg: {
@@ -109,26 +109,26 @@ module.exports = {
       },
       {
         test: /\.(woff(2)?|ttf|eot|svg)$/,
-        loader: "file-loader",
+        loader: 'file-loader',
         options: {
-          name: `[path][name].[ext]`,
+          name: '[path][name].[ext]',
         },
       },
       {
         test: /\.mp4$/,
-        loader: "file-loader",
+        loader: 'file-loader',
         options: {
-          name: "[path][name].[ext]",
+          name: '[path][name].[ext]',
         },
       },
       {
         test: /\.m?js$/,
         exclude: /node_modules/,
         use: {
-          loader: "babel-loader",
+          loader: 'babel-loader',
           options: {
-            presets: ["@babel/preset-env"],
-            plugins: ["@babel/plugin-proposal-class-properties"],
+            presets: ['@babel/preset-env'],
+            plugins: ['@babel/plugin-proposal-class-properties'],
           },
         },
       },
@@ -136,16 +136,16 @@ module.exports = {
   },
   optimization: {
     splitChunks: {
-      chunks: "all",
+      chunks: 'all',
     },
   },
   devServer: {
-    host: "192.168.0.8",
-    publicPath: "/",
+    host: '192.168.0.8',
+    publicPath: '/',
     port: 9000,
-    contentBase: path.join(__dirname, "./src/pug/index.pug"),
+    contentBase: path.join(__dirname, './src/pug/index.pug'),
     watchContentBase: true,
-    clientLogLevel: "silent",
+    clientLogLevel: 'silent',
   },
-  devtool: isDev ? "source-map" : "",
-};
+  devtool: isDev ? 'source-map' : '',
+}
