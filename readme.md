@@ -1,10 +1,11 @@
 # Sea Battle
-A copy of an old board game that was made as a JS practice
+A copy of an old board game
+I made this game as a JS practice
 
 [You can play it here!](https://ketjo.github.io/sea-battle/)
 
 ### Contributions
-[Ketjo](https://github.com/KETJO)
+[Erlan](https://gitlab.com/users/zharkeev.post/projects)
 
 ### Main screen
 ![App main screen](./src/assets/img/sea-battle.png 'main screen')
