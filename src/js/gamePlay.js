@@ -64,7 +64,6 @@ export class Gamer {
     this._table.addEventListener('click', prepForFire)
   }
 
-  // SETTERS
   _fire(cell) {
     // HIT
     if (this._isHit(cell)) {
@@ -133,7 +132,6 @@ export class Gamer {
     gameOver = false
   }
 
-  // CHECKS
   _isLose() {
     if (this._gamer === 'ai') {
       userShips--
@@ -183,7 +181,6 @@ export class Gamer {
     return arr.some((st) => st === status)
   }
 
-  // GETTERS
   _getCorForFireArr() {
     const tempArr = []
     lastHittedCells.forEach((cell) => {
