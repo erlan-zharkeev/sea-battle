@@ -6,12 +6,11 @@ const isProd = !isDev
 
 const filename = (ext) => (isDev ? `[name].${ext}` : `[name].[hash].${ext}`)
 
-/* PLUGINS */
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const CopyPlugin = require('copy-webpack-plugin')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin') // get css from js file
-/// //////////////////////////////////////////
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+
 module.exports = {
   context: path.resolve(__dirname, 'src'),
   mode: 'development',
@@ -140,9 +139,8 @@ module.exports = {
     },
   },
   devServer: {
-    host: '192.168.0.8',
     publicPath: '/',
-    port: 9000,
+    port: 8080,
     contentBase: path.join(__dirname, './src/pug/index.pug'),
     watchContentBase: true,
     clientLogLevel: 'silent',
