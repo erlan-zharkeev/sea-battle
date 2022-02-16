@@ -1,6 +1,5 @@
 # Sea Battle
-A copy of an old board game
-I made this game as a JS practice
+A copy of an old board game. Created for js OOP practice
 
 [You can play it here!](https://ketjo.github.io/sea-battle/)
 
