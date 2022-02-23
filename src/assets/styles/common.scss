@@ -1,0 +1,92 @@
+html {
+  overflow: hidden;
+  font-weight: 700;
+  font-family: $basic-font;
+  scrollbar-width: none;
+  @include MW1200 {
+    font-size: 7px;
+  }
+}
+
+.game {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100vw;
+  max-width: 1200px;
+  height: 100vh;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .app-name {
+    margin-right: 4rem;
+    font-size: 4rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .version {
+    font-size: 2rem;
+    font-weight: 400;
+  }
+
+  button:first-child {
+    margin-bottom: 1rem;
+  }
+}
+
+.sides {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 2rem;
+
+  &__user-side,
+  &__ai-side {
+    [data-status='hit'] {
+      background: $red;
+    }
+
+    [data-status='sunk'] {
+      background: $grey;
+    }
+
+    position: relative;
+    flex-grow: 1;
+  }
+
+  &__user-side {
+    [data-status='ship'] {
+      background-color: $blue;
+    }
+
+    margin-right: 2rem;
+  }
+
+  &__ai-side {
+    [data-status='ship']:hover {
+      box-shadow: $box-shadow;
+    }
+
+    [data-status='deadZone']:hover {
+      box-shadow: $box-shadow;
+    }
+
+    [data-status='empty']:hover {
+      box-shadow: $box-shadow;
+    }
+  }
+}
+
+.hide {
+  cursor: none;
+  opacity: 0;
+  transition: 0.2s;
+  pointer-events: none;
+}

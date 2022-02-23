@@ -1,8 +1,8 @@
-/* eslint-disable import/first */
-if (process.env.NODE_ENV === 'production') console.log = function () {}
 import './pug/index.pug'
-import './assets/sass/style.sass'
-import './js/gamePlay'
-import './js/positionGenerator'
-import './js/gameControls'
-import './js/sound'
+import './assets/styles/style.sass'
+import './js/sounds'
+import './js/game'
+import State from './js/state'
+import LocalStorage from './js/localStorage'
+window.$ls = new LocalStorage()
+window.$state = new State()

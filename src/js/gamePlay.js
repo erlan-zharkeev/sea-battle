@@ -1,11 +1,6 @@
-import {
-  Field,
-  randomizer,
-} from './positionGenerator'
+import { Field, randomizer } from './ship'
 
-import {
-  sound,
-} from './sound'
+import { sound } from './sound'
 
 const timeOut = 500
 let lastHittedCells = []
@@ -17,7 +12,7 @@ export class Gamer {
   constructor(table, gamer, target) {
     this._table = document.querySelector(table)
     this._gamer = gamer
-    this._allPosCells = this._table.querySelectorAll('.game__cell')
+    this._allPosCells = this._table.querySelectorAll('.cell')
     this._target = target
     this._initNextStep()
   }
@@ -36,19 +31,19 @@ export class Gamer {
   }
 
   _initUser() {
-    new Gamer('.game__aiSide', 'user')
+    new Gamer('.table__ai-side', 'user')
   }
 
   _initAi() {
     if (lastHittedCells.length === 0) {
       setTimeout(() => {
-        new Gamer('.game__userSide', 'ai', undefined)
+        new Gamer('.table__user-side', 'ai', undefined)
       }, timeOut * 2)
     } else if (!gameOver) {
       const possibleCoords = this._getCorForFireArr()
       const fireCell = possibleCoords[randomizer(0, possibleCoords.length - 1)]
       setTimeout(() => {
-        new Gamer('.game__userSide', 'ai', fireCell.dataset.cellId)
+        new Gamer('.table__user-side', 'ai', fireCell.dataset.cellId)
       }, timeOut * 2)
     }
   }
@@ -90,13 +85,13 @@ export class Gamer {
   }
 
   _showUserSide() {
-    const aiTable = document.querySelector('.game__aiSide')
-    aiTable.classList.remove('hideSide')
+    const aiTable = document.querySelector('.table__ai-side')
+    aiTable.classList.remove('hide-side')
   }
 
   _hideUserSide() {
-    const aiTable = document.querySelector('.game__aiSide')
-    aiTable.classList.add('hideSide')
+    const aiTable = document.querySelector('.table__ai-side')
+    aiTable.classList.add('hide-side')
   }
 
   _markCell(cell, mark) {
@@ -117,7 +112,7 @@ export class Gamer {
 
   _gameOver(message) {
     gameOver = true
-    const messagePage = document.querySelector('.showMessage')
+    const messagePage = document.querySelector('.show-message')
     const subject = messagePage.querySelector('p')
     subject.textContent = message
     setTimeout(() => {
@@ -144,7 +139,9 @@ export class Gamer {
 
   _isReadyForFire(cell) {
     const { status } = cell.dataset
-    if (status === 'ship' || status === 'deadZone' || status === 'empty') return true
+    if (status === 'ship' || status === 'deadZone' || status === 'empty') {
+      return true
+    }
     return false
   }
 
@@ -162,7 +159,11 @@ export class Gamer {
       shipCoord.forEach((el) => {
         this._markCell(el, 'sunk')
       })
-      const deadPos = this._getDeadPosGamePlay(shipCoord, cell.dataset.direction, shipCoord.length)
+      const deadPos = this._getDeadPosGamePlay(
+        shipCoord,
+        cell.dataset.direction,
+        shipCoord.length
+      )
       deadPos.forEach((dp) => {
         const cellForMark = this._getCellFromCoord(dp)
         this._markCell(cellForMark, 'miss')
@@ -205,9 +206,11 @@ export class Gamer {
     // remove unsupported values
     const resultArr = []
     tempArr.forEach((coord) => {
-      const table = document.querySelector('.game__userSide')
-      const cell = table.querySelector(`.game__cell[data-cell-id="${coord}"]`)
-      if (cell !== null && this._isNotHitten(cell.dataset.status)) resultArr.push(cell)
+      const table = document.querySelector('.table__user-side')
+      const cell = table.querySelector(`.cell[data-cell-id="${coord}"]`)
+      if (cell !== null && this._isNotHitten(cell.dataset.status)) {
+        resultArr.push(cell)
+      }
     })
     return resultArr
   }
@@ -226,12 +229,19 @@ export class Gamer {
   }
 
   _getShip(cell) {
-    return this._table.querySelectorAll(`.game__cell[data-name="${cell.dataset.name}"]`)
+    return this._table.querySelectorAll(
+      `.cell[data-name="${cell.dataset.name}"]`
+    )
   }
 
   _getDeadPosGamePlay(shipCoord, direction, type) {
     const coordsArr = this._getCoordsFromCells(shipCoord)
-    return new Field(`.${this._table.className}`).getDeadPos(coordsArr, direction, type, undefined)
+    return new Field(`.${this._table.className}`).getDeadPos(
+      coordsArr,
+      direction,
+      type,
+      undefined
+    )
   }
 
   _getCoordsFromCells(shipCoord) {
@@ -243,6 +253,6 @@ export class Gamer {
   }
 
   _getCellFromCoord(coord) {
-    return this._table.querySelector(`.game__cell[data-cell-id="${coord}"]`)
+    return this._table.querySelector(`.cell[data-cell-id="${coord}"]`)
   }
 }
