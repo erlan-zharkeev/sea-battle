@@ -10,7 +10,7 @@ A copy of an old board game. Created for js OOP practice
 
 ### Main screen
 
-![App main screen](./src/assets/img/sea-battle.png 'main screen')
+![App main screen](./src/static/sea-battle.png 'main screen')
 
 ## Contributing
 
