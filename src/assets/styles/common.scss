@@ -8,6 +8,30 @@ html {
   }
 }
 
+.play-game {
+  position: absolute;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  font-size: 2rem;
+  background-color: $white;
+}
+
+.resolution-stub {
+  position: absolute;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  font-size: 2rem;
+  background-color: $white;
+}
+
 .game {
   display: flex;
   flex-direction: column;
@@ -19,21 +43,51 @@ html {
   padding: 2rem;
 }
 
+.message {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  font-size: 2rem;
+  background-color: $white;
+  transform: translate(-50%, -50%);
+
+  p {
+    margin-bottom: 2rem;
+  }
+
+  button {
+    border: none;
+
+    &:hover {
+      color: $black;
+      background-color: transparent;
+    }
+  }
+}
+
 .controls {
   display: flex;
   align-items: center;
   justify-content: center;
 
   .app-name {
-    margin-right: 4rem;
-    font-size: 4rem;
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin-right: 4rem;
+    font-size: 4rem;
   }
+
   .version {
-    font-size: 2rem;
     font-weight: 400;
+    font-size: 2rem;
   }
 
   button:first-child {
@@ -70,16 +124,17 @@ html {
   }
 
   &__ai-side {
-    [data-status='ship']:hover {
-      box-shadow: $box-shadow;
-    }
-
-    [data-status='deadZone']:hover {
-      box-shadow: $box-shadow;
-    }
-
-    [data-status='empty']:hover {
-      box-shadow: $box-shadow;
+    [data-status='ship'],
+    [data-status='deadZone'],
+    [data-status='empty'] {
+      &:hover {
+        box-shadow: $aim;
+      }
+      @include MW768 {
+        &:hover {
+          box-shadow: none;
+        }
+      }
     }
   }
 }
@@ -89,4 +144,15 @@ html {
   opacity: 0;
   transition: 0.2s;
   pointer-events: none;
+}
+
+.dot {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: $cell-size/4;
+  height: $cell-size/4;
+  background-color: $black;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
 }

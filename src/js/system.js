@@ -1,10 +1,11 @@
 import Field from './field'
 import Ship from './ship'
+import Shot from './shot'
+import { clearFields } from './dom'
 
-export function restartGame(e) {
-  new Field().clearField()
-  generateShips()
-  new Gamer('.table__ai-side', 'user')
+export function restartGame() {
+  clearFields()
+  initGame()
 }
 
 function fillTable(table) {
@@ -25,5 +26,6 @@ function generateShips() {
 
 export function initGame() {
   generateShips()
+  new Shot('user')
 }
 export default null

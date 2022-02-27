@@ -19,4 +19,7 @@ export default class Sound {
   stop() {
     this._sound.stop()
   }
+  pause() {
+    this._sound.pause()
+  }
 }
