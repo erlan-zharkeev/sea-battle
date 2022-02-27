@@ -4,7 +4,7 @@ const webpack = require('webpack')
 const isDev = process.env.NODE_ENV === 'development'
 const isProd = !isDev
 
-const filename = (ext) => (isDev ? `[name].${ext}` : `[name].[hash].${ext}`)
+const filename = ext => (isDev ? `[name].${ext}` : `[name].[hash].${ext}`)
 
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
@@ -18,17 +18,9 @@ module.exports = {
   output: {
     filename: filename('js'),
     path: path.resolve(__dirname, 'dist'),
-    publicPath: isDev ? './' : '/',
   },
   plugins: [
-    new HtmlWebpackPlugin({
-      filename: 'index.html',
-      template: path.resolve(__dirname, './src/pug/index.pug'),
-      inject: true,
-      minify: {
-        collapseWhitespace: isProd,
-      },
-    }),
+    new webpack.HotModuleReplacementPlugin(),
     new CleanWebpackPlugin(),
     new CopyPlugin({
       patterns: [
@@ -42,13 +34,38 @@ module.exports = {
         },
       ],
     }),
+    new HtmlWebpackPlugin({
+      filename: 'index.html',
+      template: path.resolve(__dirname, './src/pug/index.pug'),
+      inject: true,
+      minify: {
+        collapseWhitespace: isProd,
+      },
+    }),
     new MiniCssExtractPlugin({
       filename: filename('css'),
     }),
-    new webpack.HotModuleReplacementPlugin(),
   ],
   module: {
     rules: [
+      {
+        test: /\.m?js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env'],
+            plugins: ['@babel/plugin-proposal-class-properties'],
+          },
+        },
+      },
+      {
+        test: /\.(woff(2)?|ttf|eot|svg)$/,
+        loader: 'file-loader',
+        options: {
+          name: '[path][name].[ext]',
+        },
+      },
       {
         test: /\.pug$/,
         use: [
@@ -106,31 +123,6 @@ module.exports = {
           },
         ],
       },
-      {
-        test: /\.(woff(2)?|ttf|eot|svg)$/,
-        loader: 'file-loader',
-        options: {
-          name: '[path][name].[ext]',
-        },
-      },
-      {
-        test: /\.mp4$/,
-        loader: 'file-loader',
-        options: {
-          name: '[path][name].[ext]',
-        },
-      },
-      {
-        test: /\.m?js$/,
-        exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: ['@babel/preset-env'],
-            plugins: ['@babel/plugin-proposal-class-properties'],
-          },
-        },
-      },
     ],
   },
   optimization: {
@@ -139,10 +131,6 @@ module.exports = {
     },
   },
   devServer: {
-    publicPath: '/',
-    port: 8080,
-    contentBase: path.join(__dirname, './src/pug/index.pug'),
-    watchContentBase: true,
     clientLogLevel: 'silent',
   },
   devtool: isDev ? 'source-map' : '',

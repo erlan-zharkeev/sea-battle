@@ -1,50 +1,41 @@
-html(lang="en")
-	include includes/head
-	body
-		.preloader
-			- var n = 0;
-			.lds-spinner
-				while n<12
-					- ++n
-					div
-		.wrapper
-			.game
-				.showMessage.hide
-					p You Lose!
-					button.restart restart
-				.game__start
-					button play game!
-				.game__title
-					.top-side
-						h1 Sea Battle
-					.bottom-side
-						button.restart restart
-						.game__sound
-							button.bg-soundOn sound off
-
-				.game__table-container
-					-var alphabet = ['a','b','c','d','e','f','g','h','i']
-					-var side = 0
-					while side<2
-						- ++side
-						div(class=side===1?'game__userSide':'game__aiSide')
-							.game__table
-								.game__row
-									.info__cell
-									each val in alphabet
-										.info__cell=val
-									.info__cell.last-let k
-								-var r = 0
-								while r<10
-									- ++r
-									.game__row
-										if r===10
-											.info__cell.last-num=r
-										else
-											.info__cell=r
-										-var c = 0
-										while c<10
-											- ++c
-											.game__cell(data-status="empty" data-cell-id=`${r}-${c}`)
-
-
+html(lang='en')
+  include includes/head
+  body
+    .resolution-stub rotate-screen
+    .play-game
+      button play-game
+    include includes/loader
+    include includes/info
+    .game
+      include includes/controls
+      .sides
+        - var alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i']
+        - var side = 0
+        while side<2
+          - ++side
+          div(
+            class=side === 1 ? 'sides__user-side' : 'sides__ai-side',
+            data-table=side === 1 ? 'user' : 'ai'
+          )
+            .table
+              include includes/loader
+              .table__row
+                .cell.cell--info
+                each val in alphabet
+                  .cell.cell--info= val
+                .cell.cell--info k
+              - var r = 0
+              while r<10
+                - ++r
+                .table__row
+                  if r===10
+                    .cell.cell--info.last-num= r
+                  else
+                    .cell.cell--info= r
+                  - var c = 0
+                  while c<10
+                    - ++c
+                    .cell.game-cell(
+                      data-status='empty',
+                      data-cell-id=`${r}-${c}`
+                    )

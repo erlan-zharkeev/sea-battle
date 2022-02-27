@@ -1,40 +1,25 @@
 import { Howl } from 'howler'
-
-let soundStatus = true
-let music
-
-window.addEventListener('focus', () => {
-  if (soundStatus && music) music.play()
-})
-
-window.addEventListener('blur', () => {
-  if (music)music.stop()
-})
-
-export function sound(name) {
-  let snd
-  if (soundStatus) {
-    snd = new Howl({
-      src: [`./assets/audio/${name}.mp3`],
-      loop: name === 'music',
+export default class Sound {
+  constructor(name) {
+    this._sound = null
+    this._fileName = name
+    this._setSound()
+  }
+  _setSound() {
+    this._sound = new Howl({
+      src: [`./assets/audio/${this._fileName}.mp3`],
+      loop: name === 'background',
     })
-    snd.play()
-    if (name === 'music') music = snd
+  }
+  play() {
+    const status = window.$state.getSoundStatus()
+    if (!status) return
+    this._sound.play()
+  }
+  stop() {
+    this._sound.stop()
+  }
+  pause() {
+    this._sound.pause()
   }
 }
-
-const soundBtn = document.querySelector('.game__sound')
-
-function toggleSound() {
-  const soundButton = this.firstElementChild
-  if (soundButton.innerHTML === 'sound off') {
-    soundButton.innerHTML = 'sound on'
-    soundStatus = false
-    music.stop()
-  } else {
-    soundButton.innerHTML = 'sound off'
-    soundStatus = true
-    music.play()
-  }
-}
-soundBtn.addEventListener('click', toggleSound)
