@@ -12,7 +12,7 @@ export function checkIsInternetExplorer() {
 
 export function checkOrientationSupport() {
   const orientation =
-    screen.orientation.type === 'portrait-primary' ? 'portrait' : 'landscape'
+    window.innerHeight > window.innerWidth ? 'portrait' : 'landscape'
   const width = window.screen.width
   const stub = orientation === 'portrait' && width < 768 ? 'show' : 'hide'
   resolutionSupportHandler(stub)
