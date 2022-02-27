@@ -129,9 +129,7 @@ html {
     [data-status='empty'] {
       &:hover {
         box-shadow: $aim;
-      }
-      @include MW768 {
-        &:hover {
+        @include MW1024 {
           box-shadow: none;
         }
       }
