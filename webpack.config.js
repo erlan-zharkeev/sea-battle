@@ -4,7 +4,7 @@ const webpack = require('webpack')
 const isDev = process.env.NODE_ENV === 'development'
 const isProd = !isDev
 
-const filename = ext => (isDev ? `[name].${ext}` : `[name].[hash].${ext}`)
+const filename = (ext) => (isDev ? `[name].${ext}` : `[name].[hash].${ext}`)
 
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
@@ -40,6 +40,9 @@ module.exports = {
       inject: true,
       minify: {
         collapseWhitespace: isProd,
+      },
+      meta: {
+        content: '#FFFFFF',
       },
     }),
     new MiniCssExtractPlugin({
