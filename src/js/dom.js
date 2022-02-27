@@ -69,7 +69,6 @@ export function getShip(table, cell) {
 
 export function clearFields() {
   const cells = window.$state.$refs().cells
-  const dots = window.$state.getShelledCells()
   const removeAttributes = [
     'deadZone',
     'data-deadzone-id',
@@ -77,14 +76,14 @@ export function clearFields() {
     'data-name',
     'data-direction',
   ]
-  dots.forEach((dot) => {
-    dot.remove()
-  })
+
   cells.forEach((cell) => {
     cell.setAttribute('data-status', 'empty')
     removeAttributes.forEach((attr) => {
       cell.removeAttribute(`${attr}`)
     })
+    const dot = cell.firstChild
+    if (dot) dot.remove()
   })
 }
 

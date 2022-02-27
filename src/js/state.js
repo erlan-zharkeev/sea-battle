@@ -93,10 +93,6 @@ export default class State {
     return table.querySelectorAll('.game-cell')
   }
 
-  getShelledCells() {
-    return document.querySelectorAll('.cell--shelled')
-  }
-
   getAvailableCells(table) {
     return table.querySelectorAll('.cell[data-status="empty"]')
   }
