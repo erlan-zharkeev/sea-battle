@@ -12,5 +12,9 @@ button {
   &:hover {
     color: $white;
     background-color: $blue;
+    @include MW1024 {
+      color: $black;
+      background-color: transparent;
+    }
   }
 }
