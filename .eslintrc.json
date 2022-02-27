@@ -15,9 +15,11 @@
     "radix": ["error", "as-needed"],
     "no-param-reassign": ["error", { "props": false }],
     "no-new": "off",
+    "linebreak-style": ["error", "windows"],
+    "comma-dangle": ["error", "never"],
+    "allowTernary": true,
     "consistent-return": "warn",
     "max-classes-per-file": ["error", 3],
-    "linebreak-style": ["error", "windows"],
     "import/prefer-default-export": "off",
     "no-plusplus": "off",
     "array-callback-return": "off"
