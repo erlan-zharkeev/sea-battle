@@ -1,20 +1,34 @@
 import { updateSoundBtn, showMessage } from './dom'
 import { version } from '../../package.json'
-import sounds from './sounds'
+import { sounds } from './sounds'
 
 const defaultValues = {
-  _aiShips: 10,
-  _userShips: 10,
-  _timeOut: 500,
-  _gameOver: false,
-  _lastHitCells: [],
+  aiShips: 10,
+  userShips: 10,
+  timeOut: 500,
+  gameOver: false,
+  lastHitCells: [],
 }
 export default class State {
+  #aiShips
+  #userShips
+  #timeOut
+  #gameOver
+  #lastHitCells
+  #version
+  #soundStatus
+  #initShips
+  #refs
   constructor() {
-    this._version = version
-    this._soundStatus = true
-    this._initShips = [4, 3, 3, 2, 2, 2, 1, 1, 1, 1]
-    this._refs = {
+    this.#aiShips = 10,
+    this.#userShips = 10,
+    this.#timeOut = 500,
+    this.#gameOver = false,
+    this.#lastHitCells = [],
+    this.#version = version
+    this.#soundStatus = true
+    this.#initShips = [4, 3, 3, 2, 2, 2, 1, 1, 1, 1]
+    this.#refs = {
       playBtn: document.querySelector('.play-game'),
       resolutionStub: document.querySelector('.resolution-stub'),
       versionDom: document.querySelector('.version'),
@@ -25,64 +39,65 @@ export default class State {
       sides: document.querySelectorAll('[data-table]'),
       aiTable: document.querySelector('.sides__ai-side'),
       userTable: document.querySelector('.sides__user-side'),
+      messageBlock: document.querySelector('.message'),
       aiLoader: document
         .querySelector('.sides__ai-side')
         .querySelector('.loader'),
     }
-    this._setDefaultState()
+    this.#setDefaultState()
   }
 
-  _setDefaultState() {
+  #setDefaultState() {
     Object.entries(defaultValues).forEach(([key, value]) => {
-      this[key] = value
+      this[`#${key}`] = value
     })
   }
 
   resetStore() {
-    this._setDefaultState()
+    this.#setDefaultState()
   }
 
   resetLastHitCells() {
-    this._lastHitCells = []
+    this.#lastHitCells = []
   }
 
-  $refs() {
-    return this._refs
+  getRefs() {
+    return this.#refs
   }
 
-  _setGameOverStatus(value) {
-    this._gameOver = value
+  #setGameOverStatus(value) {
+    this.#gameOver = value
   }
 
   toggleSoundStatus() {
-    this._soundStatus = !this._soundStatus
-    updateSoundBtn(this._soundStatus)
-    if (this._soundStatus) sounds.background.play()
-    else sounds.background.pause()
+    this.#soundStatus = !this.#soundStatus
+    updateSoundBtn(this.#soundStatus)
+    const action = this.#soundStatus ? 'play' : 'pause'
+    sounds.background[action]()
   }
 
   decreaseShip(value) {
-    this[value] = this[value] - 1
-    if (this[value] === 0) {
-      this._setGameOverStatus(true)
+    this[`#${value}`] = this[`#${value}`] - 1
+    if (this[`#${value}`] === 0) {
+      this.#setGameOverStatus(true)
       showMessage(value)
     }
   }
 
   pushLastHitCell(cell) {
-    this._lastHitCells.push(cell)
+    this.#lastHitCells.push(cell)
   }
 
   getSoundStatus() {
-    return this._soundStatus
+    return this.#soundStatus
   }
 
   getVersion() {
-    return this._version
+    return this.#version
   }
 
   getInitShipsArr() {
-    return this._initShips
+    return this.#initShips
   }
 
   getChildTable(el) {
@@ -98,22 +113,22 @@ export default class State {
   }
 
   getTimeoutInterval() {
-    return this._timeOut
+    return this.#timeOut
   }
 
   getAiShipsQuantity() {
-    return this._aiShips
+    return this.#aiShips
   }
 
   getUserShipsQuantity() {
-    return this._userShips
+    return this.#userShips
   }
 
   getLastHitCells() {
-    return this._lastHitCells
+    return this.#lastHitCells
   }
 
   isGameOver() {
-    return this._gameOver
+    return this.#gameOver
   }
 }

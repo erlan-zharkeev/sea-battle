@@ -21,5 +21,3 @@ export function checkOrientationSupport() {
 export function randomizer(min, max) {
   return Math.round(Math.random() * (max - min) + min)
 }
-
-export default null

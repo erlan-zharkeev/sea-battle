@@ -1,7 +1,8 @@
 import { injectShip, setDeadPos } from './dom'
-export default class Field {
+export class Field {
+  #field
   constructor(parent) {
-    this._field = window.$state.getChildTable(parent)
+    this.#field = window.$state.getChildTable(parent)
   }
 
   getDeadPos(shipCoord, direction, type, id) {
@@ -10,7 +11,7 @@ export default class Field {
     const tempCoordArr = []
     const deadZoneArr = []
 
-    // getEndsDeadPos
+    // Get ends of dead pos
     shipCoord.forEach((coord) => {
       posX = Number(coord.split('-')[0])
       posY = Number(coord.split('-')[1])
@@ -35,7 +36,7 @@ export default class Field {
       deadZoneArr.push(`${posX + 1}-${posY}`)
     })
 
-    // correction for one cell ship
+    // Correction for one cell ship
     if (type === 1) {
       deadZoneArr.push(`${posX - 1}-${posY - 1}`)
       if (direction === 'v') deadZoneArr.push(`${posX - 1}-${posY + 1}`)
@@ -43,17 +44,15 @@ export default class Field {
     }
     const allCoords = deadZoneArr.join(',').split(',')
 
-    const filteredResult = this.arrFilter(allCoords, shipCoord)
+    const filteredResult = this.#coordFilter(allCoords, shipCoord)
 
     if (id === undefined) return filteredResult
-    setDeadPos(filteredResult, id, this._field)
+    setDeadPos(filteredResult, id, this.#field)
   }
 
-  arrFilter(allCoords, shipCoord) {
-    const interResult = Array.from(new Set(allCoords)).map((el) => {
-      if (!shipCoord.includes(el)) return el
-    })
-    // filter unsupported values
+  #coordFilter(allCoords, shipCoord) {
+    const interResult = Array.from(new Set(allCoords)).filter((el) => !shipCoord.includes(el))
+    // Filter unsupported values
     return interResult.filter((c) => {
       if (c === undefined) return
       const coordArr = c.split('-')
@@ -64,7 +63,7 @@ export default class Field {
   }
 
   appendShip(arr, direction, type, id) {
-    injectShip(arr, this._field, type, id, direction)
+    injectShip(arr, this.#field, type, id, direction)
     this.getDeadPos(arr, direction, type, id)
   }
 }

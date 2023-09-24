@@ -61,15 +61,6 @@ html {
   p {
     margin-bottom: 2rem;
   }
-
-  button {
-    border: none;
-
-    &:hover {
-      color: $black;
-      background-color: transparent;
-    }
-  }
 }
 
 .controls {
@@ -125,7 +116,7 @@ html {
 
   &__ai-side {
     [data-status='ship'],
-    [data-status='deadZone'],
+    [data-status='dead-zone'],
     [data-status='empty'] {
       &:hover {
         box-shadow: $aim;

@@ -1,25 +1,25 @@
 import { Howl } from 'howler'
 export default class Sound {
+  #fileName
   constructor(name) {
-    this._sound = null
-    this._fileName = name
-    this._setSound()
+    this.sound = null
+    this.#fileName = name
+    this.#setSound()
   }
-  _setSound() {
-    this._sound = new Howl({
-      src: [`./assets/audio/${this._fileName}.mp3`],
-      loop: name === 'background',
+  #setSound() {
+    this.sound = new Howl({
+      src: [`./assets/audio/${this.#fileName}.mp3`],
+      loop: name === 'background'
     })
   }
   play() {
     const status = window.$state.getSoundStatus()
-    if (!status) return
-    this._sound.play()
+    if (status) this.sound?.play()
   }
   stop() {
-    this._sound.stop()
+    this.sound?.stop()
   }
   pause() {
-    this._sound.pause()
+    this.sound?.pause()
   }
 }

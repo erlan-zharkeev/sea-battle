@@ -1,6 +1,6 @@
 {
-  "name": "SeaBattle",
-  "version": "2.5.1",
+  "name": "Sea-battle",
+  "version": "2.5.2",
   "description": "Сlone of an old board game",
   "private": true,
   "scripts": {

@@ -1,11 +1,12 @@
-import Field from './field'
+import { Field } from './field'
 import Ship from './ship'
-import Shot from './shot'
+import { Shot } from './shot'
 import { clearFields } from './dom'
 
 export function restartGame() {
   clearFields()
   initGame()
+  window.$state.getRefs().messageBlock.classList.add('hide')
 }
 
 function fillTable(table) {
@@ -18,7 +19,7 @@ function fillTable(table) {
 }
 
 function generateShips() {
-  const sides = window.$state.$refs().sides
+  const sides = window.$state.getRefs().sides
   sides.forEach((side) => {
     fillTable(side)
   })
@@ -28,4 +29,3 @@ export function initGame() {
   generateShips()
   new Shot('user')
 }
-export default null

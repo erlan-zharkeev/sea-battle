@@ -1,5 +1,5 @@
-import sounds from './sounds'
-import Field from './field'
+import { sounds } from './sounds'
+import { Field } from './field'
 import { randomizer } from './utils'
 import {
   hideUserSide,
@@ -11,147 +11,156 @@ import {
   getShip,
 } from './dom'
 
-export default class Shot {
+export class Shot {
+  #timeOut
+  #enemyTable
+  #gamer
+  #allPosCells
+  #target
   constructor(gamer, target) {
-    this._timeOut = window.$state.getTimeoutInterval()
-    this._enemyTable = null
-    this._gamer = gamer
-    this._allPosCells = null
-    this._target = target
-    this._setInitData()
-    this._initNextStep()
+    this.#timeOut = window.$state.getTimeoutInterval()
+    this.#enemyTable = null
+    this.#gamer = gamer
+    this.#allPosCells = null
+    this.#target = target
+    this.#setInitData()
+    this.#initNextStep()
   }
 
-  _setInitData() {
-    const enemyTableClass = this._gamer === 'user' ? 'aiTable' : 'userTable'
-    this._enemyTable = window.$state.$refs()[enemyTableClass]
-    this._allPosCells = window.$state.getCellByTable(this._enemyTable)
+  #setInitData() {
+    const enemyTableClass = this.#gamer === 'user' ? 'aiTable' : 'userTable'
+    this.#enemyTable = window.$state.getRefs()[enemyTableClass]
+    this.#allPosCells = window.$state.getCellByTable(this.#enemyTable)
   }
 
-  _initNextStep() {
-    if (this._gamer === 'user') {
-      this._listenFire()
+  #initNextStep() {
+    if (this.#gamer === 'user') {
+      this.#listenFire()
       return
     }
-    if (this._target === undefined) {
-      this._getRandPosForFire()
+    if (this.#target === undefined) {
+      this.#getRandPosForFire()
       return
     }
-    const fireCell = getCellById(this._enemyTable, this._target)
-    this._fire(fireCell)
+    const fireCell = getCellById(this.#enemyTable, this.#target)
+    this.#fire(fireCell)
   }
 
-  _initUser() {
+  #initUser() {
     new Shot('user')
   }
 
-  _initAi() {
+  #initAi() {
     const gameOver = window.$state.isGameOver()
+    console.log(gameOver, 'isGame over')
     const isLastHitCellsEmpty = window.$state.getLastHitCells().length === 0
     if (isLastHitCellsEmpty) {
       setTimeout(() => {
         new Shot('ai', undefined)
-      }, this._timeOut * 2)
+      }, this.#timeOut * 2)
       return
     }
     if (!gameOver) {
-      const possibleCoords = this._getCorForFireArr()
+      const possibleCoords = this.#getCorForFireArr()
       const fireCell = possibleCoords[randomizer(0, possibleCoords.length - 1)]
       setTimeout(() => {
         const target = fireCell.dataset.cellId
         new Shot('ai', target)
-      }, this._timeOut * 2)
+      }, this.#timeOut * 2)
     }
   }
 
-  _listenFire() {
-    this._enemyTable.addEventListener('click', (e) => {
-      this._prepareForFire(e)
+  #listenFire() {
+    this.#enemyTable.addEventListener('click', (e) => {
+      this.#prepareForFire(e)
     })
   }
 
-  _prepareForFire(e) {
-    const isHit = !this._isCellNotHit(e.target.dataset.status)
+  #prepareForFire(e) {
+    const isHit = !this.#isCellNotHit(e.target.dataset.status)
     if (isHit) return
-    this._fire(e.target)
-    this._enemyTable.removeEventListener('click', this._prepForFire)
+    this.#fire(e.target)
+    this.#enemyTable.removeEventListener('click', this.#prepareForFire)
   }
 
-  _fire(cell) {
-    if (this._isHit(cell)) {
+  #fire(cell) {
+    if (this.#isHit(cell)) {
       sounds.hit.play()
       markCell(cell, 'hit')
-      const ship = getShip(this._enemyTable, cell)
+      const ship = getShip(this.#enemyTable, cell)
       removeArmor(ship, cell)
-      this._checkSunk(cell)
-      if (this._gamer === 'user') {
-        this._initUser()
+      this.#checkSunk(cell)
+      if (this.#gamer === 'user') {
+        this.#initUser()
         return
       }
-      this._getLastHitCell(cell)
-      this._initAi()
+      this.#getLastHitCell(cell)
+      console.log('init ai')
+      this.#initAi()
       return
     }
     appendDot(cell)
     sounds.miss.play()
     markCell(cell, 'miss')
-    if (this._gamer === 'user') {
-      this._initAi()
+    if (this.#gamer === 'user') {
+      this.#initAi()
       hideUserSide()
       return
     }
-    this._initUser()
+    this.#initUser()
     showUserSide()
   }
 
-  _isLose() {
-    const ships = this._gamer === 'ai' ? '_userShips' : '_aiShips'
+  #isLose() {
+    const ships = this.#gamer === 'ai' ? 'userShips' : 'aiShips'
     window.$state.decreaseShip(ships)
   }
 
-  _isReadyForFire(cell) {
+  #isReadyForFire(cell) {
     const { status } = cell.dataset
     const isShip = status === 'ship'
-    const isDeadZone = status === 'deadZone'
+    const isDeadZone = status === 'dead-zone'
     const isEmpty = status === 'empty'
     return isShip || isDeadZone || isEmpty
   }
 
-  _isHit(cell) {
+  #isHit(cell) {
     return cell.dataset.status === 'ship'
   }
 
-  _checkSunk(cell) {
-    const shipCoord = getShip(this._enemyTable, cell)
+  #checkSunk(cell) {
+    const shipCoord = getShip(this.#enemyTable, cell)
     const isArmourNull = cell.dataset.class === '0'
-    if (isArmourNull) this._setShipSunk(shipCoord, cell)
+    if (isArmourNull) this.#setShipSunk(shipCoord, cell)
   }
 
-  _setShipSunk(shipCoord, cell) {
+  #setShipSunk(shipCoord, cell) {
+    console.log('set ship is sunk 1')
     shipCoord.forEach((el) => {
       markCell(el, 'sunk')
     })
-    const deadPos = this._getDeadPosGamePlay(
+    const deadPos = this.#getDeadPosGamePlay(
       shipCoord,
       cell.dataset.direction,
       shipCoord.length
     )
     deadPos.forEach((coord) => {
-      const cellForMark = getCellById(this._enemyTable, coord)
+      const cellForMark = getCellById(this.#enemyTable, coord)
       markCell(cellForMark, 'miss')
       if (!cellForMark.firstChild) appendDot(cellForMark)
     })
-    if (this._gamer === 'ai') window.$state.resetLastHitCells()
+    if (this.#gamer === 'ai') window.$state.resetLastHitCells()
     sounds.sunk.play()
-    this._isLose()
+    console.log('set ship is sunk 2')
+    this.#isLose()
   }
 
-  _isCellNotHit(status) {
-    const arr = ['empty', 'deadZone', 'ship']
+  #isCellNotHit(status) {
+    const arr = ['empty', 'dead-zone', 'ship']
     return arr.some((st) => st === status)
   }
 
-  _getCorForFireArr() {
+  #getCorForFireArr() {
     const tempArr = []
     const lastHitCells = window.$state.getLastHitCells()
     lastHitCells.forEach((cell) => {
@@ -173,34 +182,33 @@ export default class Shot {
       tempArr.push(`${x}-${y - 1}`)
       tempArr.push(`${x}-${y + 1}`)
     })
-    // remove unsupported values
+    // Remove unsupported values
     const resultArr = []
     tempArr.forEach((coord) => {
-      const table = window.$state.$refs().userTable
+      const table = window.$state.getRefs().userTable
       const cell = getCellById(table, coord)
-      const isCellNotHit = this._isCellNotHit(cell?.dataset?.status)
+      const isCellNotHit = this.#isCellNotHit(cell?.dataset?.status)
       if (cell && isCellNotHit) resultArr.push(cell)
     })
     return resultArr
   }
 
-  _getRandPosForFire() {
+  #getRandPosForFire() {
     const outputArr = []
-    this._allPosCells.forEach((cell) => {
-      if (this._isReadyForFire(cell)) outputArr.push(cell)
+    this.#allPosCells.forEach((cell) => {
+      if (this.#isReadyForFire(cell)) outputArr.push(cell)
     })
     const target = outputArr[randomizer(0, outputArr.length - 1)]
-    this._fire(target)
+    this.#fire(target)
   }
 
-  _getLastHitCell(cell) {
-    if (Number(cell.dataset.class) === 0) return
-    window.$state.pushLastHitCell(cell)
+  #getLastHitCell(cell) {
+    if (Number(cell.dataset.class)) window.$state.pushLastHitCell(cell)
   }
 
-  _getDeadPosGamePlay(shipCoord, direction, type) {
-    const coordsArr = this._getCoordsFromCells(shipCoord)
-    return new Field(this._enemyTable).getDeadPos(
+  #getDeadPosGamePlay(shipCoord, direction, type) {
+    const coordsArr = this.#getCoordsFromCells(shipCoord)
+    return new Field(this.#enemyTable).getDeadPos(
       coordsArr,
       direction,
       type,
@@ -208,7 +216,7 @@ export default class Shot {
     )
   }
 
-  _getCoordsFromCells(shipCoord) {
+  #getCoordsFromCells(shipCoord) {
     const outputArr = []
     shipCoord.forEach((cell) => {
       outputArr.push(cell.dataset.cellId)

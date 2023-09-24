@@ -4,42 +4,40 @@ export function startDomUpdate() {
 }
 
 export function resolutionSupportHandler(value) {
-  const resolutonError = window.$state.$refs().resolutionStub
-  if (value === 'hide') {
-    resolutonError.classList.add('hide')
-    return
-  }
-  resolutonError.classList.remove('hide')
+  const resolutionError = window.$state.getRefs().resolutionStub
+  const action = value === 'hide' ? 'add' : 'remove'
+  resolutionError.classList[action]('hide')
 }
 
 export function setVersion() {
-  const versionDom = window.$state.$refs().versionDom
+  const versionDom = window.$state.getRefs().versionDom
   const version = window.$state.getVersion()
   versionDom.textContent = `v.${version}`
 }
 
 export function loaderHandler(show) {
-  const loader = window.$state.$refs().loader
-  show ? loader.classList.remove('hide') : loader.classList.add('hide')
+  const loader = window.$state.getRefs().loader
+  const action = show ? 'remove' : 'add'
+  loader.classList[action]('hide')
 }
 
 export function hidePlayBtn() {
-  const button = window.$state.$refs().playBtn
+  const button = window.$state.getRefs().playBtn
   button.classList.add('hide')
 }
 
 export function updateSoundBtn(status) {
-  const button = window.$state.$refs().soundBtn
+  const button = window.$state.getRefs().soundBtn
   button.textContent = status ? 'sound off' : 'sound on'
 }
 
 export function hideUserSide() {
-  const aiLoader = window.$state.$refs().aiLoader
+  const aiLoader = window.$state.getRefs().aiLoader
   aiLoader.classList.remove('hide')
 }
 
 export function showUserSide() {
-  const aiLoader = window.$state.$refs().aiLoader
+  const aiLoader = window.$state.getRefs().aiLoader
   aiLoader.classList.add('hide')
 }
 
@@ -68,10 +66,9 @@ export function getShip(table, cell) {
 }
 
 export function clearFields() {
-  const cells = window.$state.$refs().cells
+  const cells = window.$state.getRefs().cells
   const removeAttributes = [
-    'deadZone',
-    'data-deadzone-id',
+    'dead-zone',
     'data-class',
     'data-name',
     'data-direction',
@@ -100,15 +97,12 @@ export function injectShip(arr, field, type, id, direction) {
 export function setDeadPos(arr, id, field) {
   arr.forEach((coord) => {
     const cell = field.querySelector(`[data-cell-id="${coord}"]`)
-    if (cell) {
-      cell.setAttribute('data-status', 'deadZone')
-      cell.setAttribute('data-deadZone-id', id)
-    }
+    if (cell) cell.setAttribute('data-status', 'dead-zone')
   })
 }
 
 export function showMessage(value) {
-  const messageBlock = document.querySelector('.message')
+  const { messageBlock } = window.$state.getRefs()
   const subject = messageBlock.querySelector('p')
   const message = value === 'userShips' ? 'you lose' : 'you win'
   subject.textContent = message
@@ -118,5 +112,3 @@ export function showMessage(value) {
     window.$state.resetStore()
   }, timeOut)
 }
-
-export default null
