@@ -104,7 +104,7 @@ export function setDeadPos(arr, id, field) {
 export function showMessage(value) {
   const { messageBlock } = window.$state.getRefs()
   const subject = messageBlock.querySelector('p')
-  const message = value === 'userShips' ? 'you lose' : 'you win'
+  const message = value === 'userShips' ? 'You Lose(' : 'You Win!'
   subject.textContent = message
   const timeOut = window.$state.getTimeoutInterval()
   setTimeout(() => {

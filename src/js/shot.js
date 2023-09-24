@@ -52,7 +52,6 @@ export class Shot {
 
   #initAi() {
     const gameOver = window.$state.isGameOver()
-    console.log(gameOver, 'isGame over')
     const isLastHitCellsEmpty = window.$state.getLastHitCells().length === 0
     if (isLastHitCellsEmpty) {
       setTimeout(() => {
@@ -95,7 +94,6 @@ export class Shot {
         return
       }
       this.#getLastHitCell(cell)
-      console.log('init ai')
       this.#initAi()
       return
     }
@@ -135,7 +133,6 @@ export class Shot {
   }
 
   #setShipSunk(shipCoord, cell) {
-    console.log('set ship is sunk 1')
     shipCoord.forEach((el) => {
       markCell(el, 'sunk')
     })
@@ -151,7 +148,6 @@ export class Shot {
     })
     if (this.#gamer === 'ai') window.$state.resetLastHitCells()
     sounds.sunk.play()
-    console.log('set ship is sunk 2')
     this.#isLose()
   }
 
