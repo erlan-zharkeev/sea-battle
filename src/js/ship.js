@@ -1,5 +1,6 @@
 import { randomizer } from './utils'
 import { getCellById } from './dom'
+import { state } from './state'
 
 export default class Ship {
   #type
@@ -19,7 +20,7 @@ export default class Ship {
 
   #initGetData() {
     this.#direction = this.#getDirection()
-    this.#availableCells = window.$state.getAvailableCells(this.#table)
+    this.#availableCells = state.getAvailableCells(this.#table)
     this.#randStartPosCell = this.#getRandStartPosCell()
     this.#getNextPos()
   }

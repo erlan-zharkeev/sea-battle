@@ -9,7 +9,7 @@ const defaultValues = {
   gameOver: false,
   lastHitCells: [],
 }
-export default class State {
+class State {
   #aiShips
   #userShips
   #timeOut
@@ -132,3 +132,5 @@ export default class State {
     return this.#gameOver
   }
 }
+
+export const state = new State()

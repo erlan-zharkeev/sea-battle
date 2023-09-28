@@ -10,6 +10,7 @@ import {
   getCellById,
   getShip,
 } from './dom'
+import { state } from './state'
 
 export class Shot {
   #timeOut
@@ -18,7 +19,7 @@ export class Shot {
   #allPosCells
   #target
   constructor(gamer, target) {
-    this.#timeOut = window.$state.getTimeoutInterval()
+    this.#timeOut = state.getTimeoutInterval()
     this.#enemyTable = null
     this.#gamer = gamer
     this.#allPosCells = null
@@ -29,8 +30,8 @@ export class Shot {
 
   #setInitData() {
     const enemyTableClass = this.#gamer === 'user' ? 'aiTable' : 'userTable'
-    this.#enemyTable = window.$state.getRefs()[enemyTableClass]
-    this.#allPosCells = window.$state.getCellByTable(this.#enemyTable)
+    this.#enemyTable = state.getRefs()[enemyTableClass]
+    this.#allPosCells = state.getCellByTable(this.#enemyTable)
   }
 
   #initNextStep() {
@@ -51,8 +52,8 @@ export class Shot {
   }
 
   #initAi() {
-    const gameOver = window.$state.isGameOver()
-    const isLastHitCellsEmpty = window.$state.getLastHitCells().length === 0
+    const gameOver = state.isGameOver()
+    const isLastHitCellsEmpty = state.getLastHitCells().length === 0
     if (isLastHitCellsEmpty) {
       setTimeout(() => {
         new Shot('ai', undefined)
@@ -111,7 +112,7 @@ export class Shot {
 
   #isLose() {
     const ships = this.#gamer === 'ai' ? 'userShips' : 'aiShips'
-    window.$state.decreaseShip(ships)
+    state.decreaseShip(ships)
   }
 
   #isReadyForFire(cell) {
@@ -146,7 +147,7 @@ export class Shot {
       markCell(cellForMark, 'miss')
       if (!cellForMark.firstChild) appendDot(cellForMark)
     })
-    if (this.#gamer === 'ai') window.$state.resetLastHitCells()
+    if (this.#gamer === 'ai') state.resetLastHitCells()
     sounds.sunk.play()
     this.#isLose()
   }
@@ -158,7 +159,7 @@ export class Shot {
 
   #getCorForFireArr() {
     const tempArr = []
-    const lastHitCells = window.$state.getLastHitCells()
+    const lastHitCells = state.getLastHitCells()
     lastHitCells.forEach((cell) => {
       const x = Number(cell.dataset.cellId.split('-')[0])
       const y = Number(cell.dataset.cellId.split('-')[1])
@@ -181,7 +182,7 @@ export class Shot {
     // Remove unsupported values
     const resultArr = []
     tempArr.forEach((coord) => {
-      const table = window.$state.getRefs().userTable
+      const table = state.getRefs().userTable
       const cell = getCellById(table, coord)
       const isCellNotHit = this.#isCellNotHit(cell?.dataset?.status)
       if (cell && isCellNotHit) resultArr.push(cell)
@@ -199,7 +200,7 @@ export class Shot {
   }
 
   #getLastHitCell(cell) {
-    if (Number(cell.dataset.class)) window.$state.pushLastHitCell(cell)
+    if (Number(cell.dataset.class)) state.pushLastHitCell(cell)
   }
 
   #getDeadPosGamePlay(shipCoord, direction, type) {

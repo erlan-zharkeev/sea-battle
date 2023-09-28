@@ -1,8 +1,10 @@
 import { injectShip, setDeadPos } from './dom'
+import { state } from './state'
+
 export class Field {
   #field
   constructor(parent) {
-    this.#field = window.$state.getChildTable(parent)
+    this.#field = state.getChildTable(parent)
   }
 
   getDeadPos(shipCoord, direction, type, id) {

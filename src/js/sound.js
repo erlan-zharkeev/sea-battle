@@ -1,4 +1,6 @@
 import { Howl } from 'howler'
+import { state } from './state'
+
 export default class Sound {
   #fileName
   constructor(name) {
@@ -13,7 +15,7 @@ export default class Sound {
     })
   }
   play() {
-    const status = window.$state.getSoundStatus()
+    const status = state.getSoundStatus()
     if (status) this.sound?.play()
   }
   stop() {

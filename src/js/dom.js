@@ -1,43 +1,45 @@
+import { state } from './state'
+
 export function startDomUpdate() {
   setVersion()
   loaderHandler(false)
 }
 
 export function resolutionSupportHandler(value) {
-  const resolutionError = window.$state.getRefs().resolutionStub
+  const resolutionError = state.getRefs().resolutionStub
   const action = value === 'hide' ? 'add' : 'remove'
   resolutionError.classList[action]('hide')
 }
 
 export function setVersion() {
-  const versionDom = window.$state.getRefs().versionDom
-  const version = window.$state.getVersion()
+  const versionDom = state.getRefs().versionDom
+  const version = state.getVersion()
   versionDom.textContent = `v.${version}`
 }
 
 export function loaderHandler(show) {
-  const loader = window.$state.getRefs().loader
+  const loader = state.getRefs().loader
   const action = show ? 'remove' : 'add'
   loader.classList[action]('hide')
 }
 
 export function hidePlayBtn() {
-  const button = window.$state.getRefs().playBtn
+  const button = state.getRefs().playBtn
   button.classList.add('hide')
 }
 
 export function updateSoundBtn(status) {
-  const button = window.$state.getRefs().soundBtn
+  const button = state.getRefs().soundBtn
   button.textContent = status ? 'sound off' : 'sound on'
 }
 
 export function hideUserSide() {
-  const aiLoader = window.$state.getRefs().aiLoader
+  const aiLoader = state.getRefs().aiLoader
   aiLoader.classList.remove('hide')
 }
 
 export function showUserSide() {
-  const aiLoader = window.$state.getRefs().aiLoader
+  const aiLoader = state.getRefs().aiLoader
   aiLoader.classList.add('hide')
 }
 
@@ -66,7 +68,7 @@ export function getShip(table, cell) {
 }
 
 export function clearFields() {
-  const cells = window.$state.getRefs().cells
+  const cells = state.getRefs().cells
   const removeAttributes = [
     'dead-zone',
     'data-class',
@@ -102,13 +104,13 @@ export function setDeadPos(arr, id, field) {
 }
 
 export function showMessage(value) {
-  const { messageBlock } = window.$state.getRefs()
+  const { messageBlock } = state.getRefs()
   const subject = messageBlock.querySelector('p')
   const message = value === 'userShips' ? 'You Lose(' : 'You Win!'
   subject.textContent = message
-  const timeOut = window.$state.getTimeoutInterval()
+  const timeOut = state.getTimeoutInterval()
   setTimeout(() => {
     messageBlock.classList.remove('hide')
-    window.$state.resetStore()
+    state.resetStore()
   }, timeOut)
 }

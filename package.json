@@ -1,13 +1,12 @@
 {
   "name": "Sea-battle",
-  "version": "2.5.3",
+  "version": "2.5.4",
   "description": "Сlone of an old board game",
   "private": true,
   "scripts": {
-    "dev": "cross-env NODE_ENV=development webpack --mode development",
     "build": "cross-env NODE_ENV=production webpack --mode production",
     "watch": "cross-env NODE_ENV=development webpack --mode development --watch",
-    "start": "cross-env NODE_ENV=development webpack-dev-server --mode development  --open --host",
+    "dev": "cross-env NODE_ENV=development webpack-dev-server --mode development  --open --host",
     "stylelint": "stylelint ./src/assets/styles/*.scss --fix"
   },
   "browserslist": [
