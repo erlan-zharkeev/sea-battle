@@ -1,4 +1,3 @@
-import { startDomUpdate, hidePlayBtn } from './dom'
 import { checkIsInternetExplorer, checkOrientationSupport } from './utils'
 import { initGame, restartGame } from './system'
 import { sounds } from './sounds'
@@ -7,19 +6,22 @@ import { state } from './state'
 window.addEventListener('resize', checkOrientationSupport)
 window.addEventListener('focus', sounds.background.play)
 window.addEventListener('blur', sounds.background.pause)
-window.addEventListener('load', function () {
+window.addEventListener('load', () => {
+  const { versionDom } = state.getRefs()
+  const version = state.getVersion()
+  versionDom.textContent = `v.${version}`
   checkIsInternetExplorer()
   checkOrientationSupport()
-  startDomUpdate()
-  state.getRefs().restartBtns.forEach((btn) => {
+  const { restartBtns, soundBtn, playBtn } = state.getRefs()
+  restartBtns.forEach((btn) => {
     btn.addEventListener('click', restartGame)
   })
-  state.getRefs().soundBtn.addEventListener('click', () => {
+  soundBtn.addEventListener('click', () => {
     state.toggleSoundStatus()
   })
-  state.getRefs().playBtn.addEventListener('click', function () {
+  playBtn.addEventListener('click', () => {
     initGame()
-    hidePlayBtn()
-    sounds.background.play()
+    playBtn.classList.add('hide')
+    sounds.background.play(state.getSoundStatus())
   })
 })

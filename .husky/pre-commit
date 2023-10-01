@@ -1,0 +1,15 @@
+#!/bin/bash
+
+eslint="yarn eslint"
+stylelint="yarn stylelint"
+
+if ! $eslint; then
+    echo "Error, check eslinter"
+    exit 1
+fi
+
+if ! $stylelint; then
+    echo "Error, check stylelinter"
+    exit 1
+fi
+undefined

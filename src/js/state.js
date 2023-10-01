@@ -1,4 +1,3 @@
-import { updateSoundBtn, showMessage } from './dom'
 import { version } from '../../package.json'
 import { sounds } from './sounds'
 
@@ -7,24 +6,33 @@ const defaultValues = {
   userShips: 10,
   timeOut: 500,
   gameOver: false,
-  lastHitCells: [],
+  lastHitCells: []
 }
 class State {
   #aiShips
+
   #userShips
+
   #timeOut
+
   #gameOver
+
   #lastHitCells
+
   #version
+
   #soundStatus
+
   #initShips
+
   #refs
+
   constructor() {
-    this.#aiShips = 10,
-    this.#userShips = 10,
-    this.#timeOut = 500,
-    this.#gameOver = false,
-    this.#lastHitCells = [],
+    this.#aiShips = 10
+    this.#userShips = 10
+    this.#timeOut = 500
+    this.#gameOver = false
+    this.#lastHitCells = []
     this.#version = version
     this.#soundStatus = true
     this.#initShips = [4, 3, 3, 2, 2, 2, 1, 1, 1, 1]
@@ -33,7 +41,6 @@ class State {
       resolutionStub: document.querySelector('.resolution-stub'),
       versionDom: document.querySelector('.version'),
       cells: document.querySelectorAll('.game-cell'),
-      loader: document.querySelector('.loader'),
       soundBtn: document.querySelector('.sound-btn'),
       restartBtns: document.querySelectorAll('.restart-btn'),
       sides: document.querySelectorAll('[data-table]'),
@@ -42,7 +49,7 @@ class State {
       messageBlock: document.querySelector('.message'),
       aiLoader: document
         .querySelector('.sides__ai-side')
-        .querySelector('.loader'),
+        .querySelector('.loader')
     }
     this.#setDefaultState()
   }
@@ -71,16 +78,29 @@ class State {
 
   toggleSoundStatus() {
     this.#soundStatus = !this.#soundStatus
-    updateSoundBtn(this.#soundStatus)
+    const { soundBtn } = state.getRefs()
+    soundBtn.textContent = this.#soundStatus ? 'sound off' : 'sound on'
     const action = this.#soundStatus ? 'play' : 'pause'
-    sounds.background[action]()
+    sounds.background[action](this.#soundStatus)
+  }
+
+  #showMessage(value) {
+    const { messageBlock } = state.getRefs()
+    const subject = messageBlock.querySelector('p')
+    const message = value === 'userShips' ? 'You Lose(' : 'You Win!'
+    subject.textContent = message
+    const timeOut = state.getTimeoutInterval()
+    setTimeout(() => {
+      messageBlock.classList.remove('hide')
+      state.resetStore()
+    }, timeOut)
   }
 
   decreaseShip(value) {
     this[`#${value}`] = this[`#${value}`] - 1
     if (this[`#${value}`] === 0) {
       this.#setGameOverStatus(true)
-      showMessage(value)
+      this.#showMessage(value)
     }
   }
 

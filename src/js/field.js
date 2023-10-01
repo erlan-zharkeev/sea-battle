@@ -1,8 +1,8 @@
-import { injectShip, setDeadPos } from './dom'
 import { state } from './state'
 
 export class Field {
   #field
+
   constructor(parent) {
     this.#field = state.getChildTable(parent)
   }
@@ -49,7 +49,14 @@ export class Field {
     const filteredResult = this.#coordFilter(allCoords, shipCoord)
 
     if (id === undefined) return filteredResult
-    setDeadPos(filteredResult, id, this.#field)
+    this.#setDeadPos(filteredResult, this.#field)
+  }
+
+  #setDeadPos(arr, field) {
+    arr.forEach((coord) => {
+      const cell = field.querySelector(`[data-cell-id="${coord}"]`)
+      if (cell) cell.setAttribute('data-status', 'dead-zone')
+    })
   }
 
   #coordFilter(allCoords, shipCoord) {
@@ -64,8 +71,18 @@ export class Field {
     })
   }
 
+  #injectShip(arr, field, type, id, direction) {
+    arr.forEach((coord) => {
+      const cell = field.querySelector(`[data-cell-id="${coord}"]`)
+      cell.setAttribute('data-status', 'ship')
+      cell.setAttribute('data-class', type)
+      cell.setAttribute('data-name', id)
+      cell.setAttribute('data-direction', direction)
+    })
+  }
+
   appendShip(arr, direction, type, id) {
-    injectShip(arr, this.#field, type, id, direction)
+    this.#injectShip(arr, this.#field, type, id, direction)
     this.getDeadPos(arr, direction, type, id)
   }
 }

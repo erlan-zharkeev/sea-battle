@@ -1,11 +1,28 @@
+image: node:14.20.1
+
+stages:
+  - build
+  - deploy
+
+cache:
+  paths:
+    - node_modules/
+
+build:
+  stage: build
+  script:
+    - yarn install
+    - yarn build
+  artifacts:
+    paths:
+      - dist/
+
 pages:
   stage: deploy
   script:
-    - mkdir .public
-    - cp -r ./dist/* .public
-    - mv .public public
+    - mv dist public/
   artifacts:
     paths:
-      - public
+      - public/
   only:
     - master

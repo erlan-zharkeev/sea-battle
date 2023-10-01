@@ -1,15 +1,21 @@
 import { randomizer } from './utils'
-import { getCellById } from './dom'
 import { state } from './state'
 
 export default class Ship {
   #type
+
   #id
+
   #field
+
   #table
+
   #direction
+
   #availableCells
+
   #randStartPosCell
+
   constructor(type, field, table, id) {
     this.#type = type
     this.#id = id
@@ -30,7 +36,7 @@ export default class Ship {
   }
 
   #getRandStartPosCell() {
-    let index = randomizer(0, this.#availableCells.length - 1)
+    const index = randomizer(0, this.#availableCells.length - 1)
     return this.#availableCells[index].dataset.cellId
   }
 
@@ -71,7 +77,7 @@ export default class Ship {
   }
 
   #checkNextPos(coord) {
-    const cell = getCellById(this.#table, coord)
+    const cell = this.#table.querySelector(`.cell[data-cell-id="${coord}"]`)
     return cell.dataset.status === 'empty'
   }
 }

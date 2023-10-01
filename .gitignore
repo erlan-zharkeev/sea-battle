@@ -3,4 +3,5 @@ node_modules
 desktop.ini
 yarn-error.log
 .DS_Store
+.dist
 

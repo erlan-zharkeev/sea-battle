@@ -1,23 +1,19 @@
 import { sounds } from './sounds'
 import { Field } from './field'
 import { randomizer } from './utils'
-import {
-  hideUserSide,
-  showUserSide,
-  appendDot,
-  markCell,
-  removeArmor,
-  getCellById,
-  getShip,
-} from './dom'
 import { state } from './state'
 
 export class Shot {
   #timeOut
+
   #enemyTable
+
   #gamer
+
   #allPosCells
+
   #target
+
   constructor(gamer, target) {
     this.#timeOut = state.getTimeoutInterval()
     this.#enemyTable = null
@@ -34,6 +30,24 @@ export class Shot {
     this.#allPosCells = state.getCellByTable(this.#enemyTable)
   }
 
+  #markCell(cell, mark) {
+    cell.dataset.status = mark
+  }
+
+  #getCellById(table, id) {
+    return table.querySelector(`.cell[data-cell-id="${id}"]`)
+  }
+
+  #getShip(table, cell) {
+    return table.querySelectorAll(`.cell[data-name="${cell.dataset.name}"]`)
+  }
+
+  #removeArmor(ship) {
+    ship.forEach((el) => {
+      el.dataset.class = Number(el.dataset.class) - 1
+    })
+  }
+
   #initNextStep() {
     if (this.#gamer === 'user') {
       this.#listenFire()
@@ -43,7 +57,7 @@ export class Shot {
       this.#getRandPosForFire()
       return
     }
-    const fireCell = getCellById(this.#enemyTable, this.#target)
+    const fireCell = this.#getCellById(this.#enemyTable, this.#target)
     this.#fire(fireCell)
   }
 
@@ -85,10 +99,10 @@ export class Shot {
 
   #fire(cell) {
     if (this.#isHit(cell)) {
-      sounds.hit.play()
-      markCell(cell, 'hit')
-      const ship = getShip(this.#enemyTable, cell)
-      removeArmor(ship, cell)
+      sounds.hit.play(state.getSoundStatus())
+      this.#markCell(cell, 'hit')
+      const ship = this.#getShip(this.#enemyTable, cell)
+      this.#removeArmor(ship, cell)
       this.#checkSunk(cell)
       if (this.#gamer === 'user') {
         this.#initUser()
@@ -98,16 +112,18 @@ export class Shot {
       this.#initAi()
       return
     }
-    appendDot(cell)
-    sounds.miss.play()
-    markCell(cell, 'miss')
+    this.#appendDot(cell)
+    sounds.miss.play(state.getSoundStatus())
+    this.#markCell(cell, 'miss')
     if (this.#gamer === 'user') {
       this.#initAi()
-      hideUserSide()
+      const { aiLoader } = state.getRefs()
+      aiLoader.classList.remove('hide')
       return
     }
     this.#initUser()
-    showUserSide()
+    const { aiLoader } = state.getRefs()
+    aiLoader.classList.add('hide')
   }
 
   #isLose() {
@@ -128,14 +144,20 @@ export class Shot {
   }
 
   #checkSunk(cell) {
-    const shipCoord = getShip(this.#enemyTable, cell)
+    const shipCoord = this.#getShip(this.#enemyTable, cell)
     const isArmourNull = cell.dataset.class === '0'
     if (isArmourNull) this.#setShipSunk(shipCoord, cell)
   }
 
+  #appendDot(cell) {
+    const dot = document.createElement('div')
+    dot.classList.add('dot')
+    cell.append(dot)
+  }
+
   #setShipSunk(shipCoord, cell) {
     shipCoord.forEach((el) => {
-      markCell(el, 'sunk')
+      this.#markCell(el, 'sunk')
     })
     const deadPos = this.#getDeadPosGamePlay(
       shipCoord,
@@ -143,12 +165,12 @@ export class Shot {
       shipCoord.length
     )
     deadPos.forEach((coord) => {
-      const cellForMark = getCellById(this.#enemyTable, coord)
-      markCell(cellForMark, 'miss')
-      if (!cellForMark.firstChild) appendDot(cellForMark)
+      const cellForMark = this.#getCellById(this.#enemyTable, coord)
+      this.#markCell(cellForMark, 'miss')
+      if (!cellForMark.firstChild) this.#appendDot(cellForMark)
     })
     if (this.#gamer === 'ai') state.resetLastHitCells()
-    sounds.sunk.play()
+    sounds.sunk.play(state.getSoundStatus())
     this.#isLose()
   }
 
@@ -183,7 +205,7 @@ export class Shot {
     const resultArr = []
     tempArr.forEach((coord) => {
       const table = state.getRefs().userTable
-      const cell = getCellById(table, coord)
+      const cell = this.#getCellById(table, coord)
       const isCellNotHit = this.#isCellNotHit(cell?.dataset?.status)
       if (cell && isCellNotHit) resultArr.push(cell)
     })

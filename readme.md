@@ -1,8 +1,6 @@
 # Sea Battle
 
-A copy of an old board game. Created for js OOP practice
-
-[You can play it here!](https://ketjo.gitlab.io/sea-battle/)
+[Play it here!](https://ketjo.gitlab.io/sea-battle/)
 
 ### Contributions
 
@@ -19,7 +17,3 @@ Changes and improvements are more than welcome! Feel free to fork and open a mer
 ### Recommendation
 Node v14.20.1
 Package manager `yarn`
-
-### Deploy
-Run `yarn build`
-Merge to master
