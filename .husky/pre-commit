@@ -12,4 +12,3 @@ if ! $stylelint; then
     echo "Error, check stylelinter"
     exit 1
 fi
-undefined
