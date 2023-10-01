@@ -60,28 +60,12 @@ class State {
     })
   }
 
-  resetStore() {
+  #resetStore() {
     this.#setDefaultState()
-  }
-
-  resetLastHitCells() {
-    this.#lastHitCells = []
-  }
-
-  getRefs() {
-    return this.#refs
   }
 
   #setGameOverStatus(value) {
     this.#gameOver = value
-  }
-
-  toggleSoundStatus() {
-    this.#soundStatus = !this.#soundStatus
-    const { soundBtn } = state.getRefs()
-    soundBtn.textContent = this.#soundStatus ? 'sound off' : 'sound on'
-    const action = this.#soundStatus ? 'play' : 'pause'
-    sounds.background[action](this.#soundStatus)
   }
 
   #showMessage(value) {
@@ -92,7 +76,7 @@ class State {
     const timeOut = state.getTimeoutInterval()
     setTimeout(() => {
       messageBlock.classList.remove('hide')
-      state.resetStore()
+      this.#resetStore()
     }, timeOut)
   }
 
@@ -106,6 +90,22 @@ class State {
 
   pushLastHitCell(cell) {
     this.#lastHitCells.push(cell)
+  }
+
+  resetLastHitCells() {
+    this.#lastHitCells = []
+  }
+
+  toggleSoundStatus() {
+    this.#soundStatus = !this.#soundStatus
+    const { soundBtn } = state.getRefs()
+    soundBtn.textContent = this.#soundStatus ? 'sound off' : 'sound on'
+    const action = this.#soundStatus ? 'play' : 'pause'
+    sounds.background[action](this.#soundStatus)
+  }
+
+  getRefs() {
+    return this.#refs
   }
 
   getSoundStatus() {
@@ -134,14 +134,6 @@ class State {
 
   getTimeoutInterval() {
     return this.#timeOut
-  }
-
-  getAiShipsQuantity() {
-    return this.#aiShips
-  }
-
-  getUserShipsQuantity() {
-    return this.#userShips
   }
 
   getLastHitCells() {
