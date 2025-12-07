@@ -1,6 +1,6 @@
 {
   "name": "sea-battle",
-  "version": "2.5.6",
+  "version": "2.5.7",
   "description": "clone of an old board game",
   "private": false,
   "packageManager": "pnpm@9.15.1",

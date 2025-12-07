@@ -1,4 +1,4 @@
-const CACHE_NAME = 'sea-battle-static-v1'
+const CACHE_NAME = 'sea-battle-static-v-2'
 const APP_SHELL = ['./', './index.html', './favicon.ico', './site.webmanifest']
 const sw = globalThis
 
