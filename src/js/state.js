@@ -38,7 +38,7 @@ class State {
     this.#initShips = [4, 3, 3, 2, 2, 2, 1, 1, 1, 1]
     this.#refs = {
       playBtn: document.querySelector('.play-game'),
-      resolutionStub: document.querySelector('.resolution-stub'),
+      // resolutionStub: document.querySelector('.resolution-stub'),
       versionDom: document.querySelector('.version'),
       cells: document.querySelectorAll('.game-cell'),
       soundBtn: document.querySelector('.sound-btn'),

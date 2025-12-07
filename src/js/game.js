@@ -1,9 +1,8 @@
-import { checkIsInternetExplorer, checkOrientationSupport } from './utils'
+import { checkIsInternetExplorer } from './utils'
 import { initGame, restartGame } from './system'
 import { sounds } from './sounds'
 import { state } from './state'
 
-window.addEventListener('resize', checkOrientationSupport)
 window.addEventListener('focus', sounds.background.play)
 window.addEventListener('blur', sounds.background.pause)
 window.addEventListener('load', () => {
@@ -11,7 +10,6 @@ window.addEventListener('load', () => {
   const version = state.getVersion()
   versionDom.textContent = `v.${version}`
   checkIsInternetExplorer()
-  checkOrientationSupport()
   const { restartBtns, soundBtn, playBtn } = state.getRefs()
   restartBtns.forEach((btn) => {
     btn.addEventListener('click', restartGame)
