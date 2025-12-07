@@ -1,3 +1,5 @@
+@use './variables' as *;
+
 .table {
   &__row {
     display: flex;

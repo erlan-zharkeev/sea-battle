@@ -1,4 +1,4 @@
-image: node:14.20.1
+image: node:18.13.0
 
 stages:
   - build
@@ -11,8 +11,8 @@ cache:
 build:
   stage: build
   script:
-    - yarn install
-    - yarn build
+    - npm install
+    - npm run build
   artifacts:
     paths:
       - dist/

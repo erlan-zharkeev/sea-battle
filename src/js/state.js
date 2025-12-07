@@ -1,4 +1,4 @@
-import { version } from '../../package.json'
+import packageJson from '../../package.json'
 import { sounds } from './sounds'
 
 const defaultValues = {
@@ -33,7 +33,7 @@ class State {
     this.#timeOut = 500
     this.#gameOver = false
     this.#lastHitCells = []
-    this.#version = version
+    this.#version = packageJson.version
     this.#soundStatus = true
     this.#initShips = [4, 3, 3, 2, 2, 2, 1, 1, 1, 1]
     this.#refs = {

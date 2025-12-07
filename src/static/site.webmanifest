@@ -1,6 +1,8 @@
 {
   "name": "sea battle",
   "short_name": "sea battle",
+  "start_url": "./index.html",
+  "scope": ".",
   "icons": [
     {
       "src": "/android-icon-36x36.png",
@@ -41,5 +43,6 @@
   ],
   "theme_color": "#FFFFFF",
   "background_color": "#FFFFFF",
-  "display": "standalone"
+  "display": "standalone",
+  "orientation": "portrait"
 }

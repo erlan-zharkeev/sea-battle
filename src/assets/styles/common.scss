@@ -1,9 +1,13 @@
+@use 'sass:math';
+@use './variables' as *;
+@use './mediaqueries' as *;
+
 html {
   overflow: hidden;
   font-weight: 700;
   font-family: $basic-font;
   scrollbar-width: none;
-  @include MW1200 {
+  @include max-width-1200 {
     font-size: 7px;
   }
 }
@@ -120,7 +124,7 @@ html {
     [data-status='empty'] {
       &:hover {
         box-shadow: $aim;
-        @include MW1024 {
+        @include max-width-1024 {
           box-shadow: none;
         }
       }
@@ -139,8 +143,8 @@ html {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: $cell-size/4;
-  height: $cell-size/4;
+  width: math.div($cell-size, 4);
+  height: math.div($cell-size, 4);
   background-color: $black;
   border-radius: 50%;
   transform: translate(-50%, -50%);

@@ -4,17 +4,18 @@ const webpack = require('webpack')
 const isDev = process.env.NODE_ENV === 'development'
 const isProd = !isDev
 
-const filename = (ext) => (isDev ? `[name].${ext}` : `[name].[hash].${ext}`)
+const filename = (ext) => (isDev ? `[name].${ext}` : `[name].[contenthash].${ext}`)
 
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const CopyPlugin = require('copy-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
 
 module.exports = {
   context: path.resolve(__dirname, 'src'),
   mode: process.env.NODE_ENV,
-  entry: ['@babel/polyfill', './index.js'],
+  entry: ['core-js/stable', 'regenerator-runtime/runtime', './index.js'],
   output: {
     filename: filename('js'),
     path: path.resolve(__dirname, 'dist')
@@ -64,9 +65,9 @@ module.exports = {
       },
       {
         test: /\.(woff(2)?|ttf|eot|svg)$/,
-        loader: 'file-loader',
-        options: {
-          name: '[path][name].[ext]'
+        type: 'asset/resource',
+        generator: {
+          filename: '[path][name][ext]'
         }
       },
       {
@@ -88,7 +89,14 @@ module.exports = {
           },
           'css-loader',
           'postcss-loader',
-          'sass-loader'
+          {
+            loader: 'sass-loader',
+            options: {
+              sassOptions: {
+                silenceDeprecations: ['legacy-js-api']
+              }
+            }
+          }
         ]
       },
       {
@@ -101,15 +109,13 @@ module.exports = {
         ]
       },
       {
-        test: /\.(gif|png|jpe?g|svg|mp3)$/i,
+        test: /\.(gif|png|jpe?g|mp3)$/i,
         exclude: /node_modules/,
+        type: 'asset/resource',
+        generator: {
+          filename: '[path][name][ext]'
+        },
         use: [
-          {
-            loader: 'file-loader',
-            options: {
-              name: '[path][name].[ext]'
-            }
-          },
           {
             loader: 'image-webpack-loader',
             options: {
@@ -131,10 +137,15 @@ module.exports = {
   optimization: {
     splitChunks: {
       chunks: 'all'
-    }
+    },
+    minimize: isProd,
+    minimizer: ['...', new CssMinimizerPlugin()]
   },
   devServer: {
-    clientLogLevel: 'silent'
+    client: {
+      logging: 'none'
+    },
+    hot: true
   },
-  devtool: isDev ? 'source-map' : ''
+  devtool: isDev ? 'source-map' : false
 }

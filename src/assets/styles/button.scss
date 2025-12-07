@@ -1,3 +1,6 @@
+@use './variables' as *;
+@use './mediaqueries' as *;
+
 button {
   display: flex;
   align-items: center;
@@ -12,7 +15,7 @@ button {
   &:hover {
     color: $white;
     background-color: $blue;
-    @include MW1024 {
+    @include max-width-1024 {
       color: $black;
       background-color: transparent;
     }

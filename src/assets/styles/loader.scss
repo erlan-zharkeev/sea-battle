@@ -1,3 +1,6 @@
+@use 'sass:math';
+@use './variables' as *;
+
 .loader {
   position: absolute;
   top: 0;
@@ -26,7 +29,7 @@
 
 .table {
   .lds-spinner {
-    transform: translateX($cell-size/2);
+    transform: translateX(math.div($cell-size, 2));
   }
 }
 
