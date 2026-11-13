@@ -1,13 +1,6 @@
 import packageJson from '../../package.json'
 import { sounds } from './sounds'
 
-const defaultValues = {
-  aiShips: 10,
-  userShips: 10,
-  timeOut: 500,
-  gameOver: false,
-  lastHitCells: []
-}
 class State {
   #aiShips
 
@@ -27,12 +20,10 @@ class State {
 
   #refs
 
+  #messageTimeout
+
   constructor() {
-    this.#aiShips = 10
-    this.#userShips = 10
     this.#timeOut = 500
-    this.#gameOver = false
-    this.#lastHitCells = []
     this.#version = packageJson.version
     this.#soundStatus = true
     this.#initShips = [4, 3, 3, 2, 2, 2, 1, 1, 1, 1]
@@ -51,21 +42,21 @@ class State {
         .querySelector('.sides__ai-side')
         .querySelector('.loader')
     }
-    this.#setDefaultState()
+    this.reset()
   }
 
-  #setDefaultState() {
-    Object.entries(defaultValues).forEach(([key, value]) => {
-      this[`#${key}`] = value
-    })
-  }
-
-  #resetStore() {
-    this.#setDefaultState()
+  reset() {
+    clearTimeout(this.#messageTimeout)
+    this.#aiShips = this.#initShips.length
+    this.#userShips = this.#initShips.length
+    this.#setGameOverStatus(false)
+    this.resetLastHitCells()
+    this.#refs.messageBlock.classList.add('hide')
   }
 
   #setGameOverStatus(value) {
     this.#gameOver = value
+    this.#refs.aiLoader.classList.add('hide')
   }
 
   #showMessage(value) {
@@ -74,15 +65,18 @@ class State {
     const message = value === 'userShips' ? 'You Lose(' : 'You Win!'
     subject.textContent = message
     const timeOut = state.getTimeoutInterval()
-    setTimeout(() => {
+    this.#messageTimeout = setTimeout(() => {
       messageBlock.classList.remove('hide')
-      this.#resetStore()
     }, timeOut)
   }
 
   decreaseShip(value) {
-    this[`#${value}`] = this[`#${value}`] - 1
-    if (this[`#${value}`] === 0) {
+    if (this.#gameOver) return
+    if (value === 'userShips') this.#userShips -= 1
+    else this.#aiShips -= 1
+
+    const remainingShips = value === 'userShips' ? this.#userShips : this.#aiShips
+    if (remainingShips === 0) {
       this.#setGameOverStatus(true)
       this.#showMessage(value)
     }

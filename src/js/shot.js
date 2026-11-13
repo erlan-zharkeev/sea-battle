@@ -4,6 +4,18 @@ import { randomizer } from './utils'
 import { state } from './state'
 
 export class Shot {
+  static #aiTimeout
+
+  static #fireHandler
+
+  static reset() {
+    clearTimeout(Shot.#aiTimeout)
+    const { aiTable, aiLoader } = state.getRefs()
+    aiTable.removeEventListener('click', Shot.#fireHandler)
+    Shot.#fireHandler = null
+    aiLoader.classList.add('hide')
+  }
+
   #timeOut
 
   #enemyTable
@@ -49,6 +61,7 @@ export class Shot {
   }
 
   #initNextStep() {
+    if (state.isGameOver()) return
     if (this.#gamer === 'user') {
       this.#listenFire()
       return
@@ -66,35 +79,30 @@ export class Shot {
   }
 
   #initAi() {
-    const gameOver = state.isGameOver()
-    const isLastHitCellsEmpty = state.getLastHitCells().length === 0
-    if (isLastHitCellsEmpty) {
-      setTimeout(() => {
-        new Shot('ai', undefined)
-      }, this.#timeOut * 2)
-      return
-    }
-    if (!gameOver) {
-      const possibleCoords = this.#getCorForFireArr()
-      const fireCell = possibleCoords[randomizer(0, possibleCoords.length - 1)]
-      setTimeout(() => {
-        const target = fireCell.dataset.cellId
-        new Shot('ai', target)
-      }, this.#timeOut * 2)
-    }
+    if (state.isGameOver()) return
+
+    const possibleCoords = this.#getCorForFireArr()
+    const target = possibleCoords.length
+      ? possibleCoords[randomizer(0, possibleCoords.length - 1)].dataset.cellId
+      : undefined
+    clearTimeout(Shot.#aiTimeout)
+    Shot.#aiTimeout = setTimeout(() => {
+      new Shot('ai', target)
+    }, this.#timeOut * 2)
   }
 
   #listenFire() {
-    this.#enemyTable.addEventListener('click', (e) => {
-      this.#prepareForFire(e)
-    })
+    Shot.reset()
+    Shot.#fireHandler = (e) => this.#prepareForFire(e)
+    this.#enemyTable.addEventListener('click', Shot.#fireHandler)
   }
 
   #prepareForFire(e) {
-    const isHit = !this.#isCellNotHit(e.target.dataset.status)
-    if (isHit) return
-    this.#fire(e.target)
-    this.#enemyTable.removeEventListener('click', this.#prepareForFire)
+    const cell = e.target.closest('.game-cell')
+    if (state.isGameOver() || !cell || !this.#isReadyForFire(cell)) return
+
+    Shot.reset()
+    this.#fire(cell)
   }
 
   #fire(cell) {
@@ -174,11 +182,6 @@ export class Shot {
     this.#isLose()
   }
 
-  #isCellNotHit(status) {
-    const arr = ['empty', 'dead-zone', 'ship']
-    return arr.some((st) => st === status)
-  }
-
   #getCorForFireArr() {
     const tempArr = []
     const lastHitCells = state.getLastHitCells()
@@ -206,8 +209,7 @@ export class Shot {
     tempArr.forEach((coord) => {
       const table = state.getRefs().userTable
       const cell = this.#getCellById(table, coord)
-      const isCellNotHit = this.#isCellNotHit(cell?.dataset?.status)
-      if (cell && isCellNotHit) resultArr.push(cell)
+      if (cell && this.#isReadyForFire(cell)) resultArr.push(cell)
     })
     return resultArr
   }

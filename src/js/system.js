@@ -39,12 +39,13 @@ function generateShips() {
 }
 
 export function initGame() {
+  Shot.reset()
+  state.reset()
+  clearFields()
   generateShips()
   new Shot('user')
 }
 
 export function restartGame() {
-  clearFields()
   initGame()
-  state.getRefs().messageBlock.classList.add('hide')
 }
